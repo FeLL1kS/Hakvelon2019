@@ -1,12 +1,24 @@
-const personRadius = 20;
-const interestRadius = 10;
-const interestDistance = 50;
+const personRadius = 50;
+const interestRadius = 50;
+const interestDistance = 120;
 const area = 2 * (personRadius + interestRadius + interestDistance + 20);
-const circleNum = 3;
-const circleDistance = 150;
+const circleStartNum = 6;
+const circleDistance = 420;
+const epsilon = 4;
 
 let cnv = document.getElementById("octoquarium")
 let ctx = cnv.getContext("2d");
+
+function randomDirection(){
+    let rng =  Math.random();
+    if (rng > 0.5){
+        return 1;
+    }
+    else {
+        return -1;
+    }
+}
+
 
 class Person {
     constructor (interests, x, y){
@@ -16,71 +28,169 @@ class Person {
             x : x,
             y : y
         };
+        this.constPos = {
+            x : x,
+            y : y
+        };
         
-        this.startAngle = 2 * Math.PI * Math.random();
+        this.aim = {
+            x : this.constPos.x + randomDirection() * 20,
+            y : this.constPos.y + randomDirection() * 20
+        }
+
+        this.flag = {
+            x : false,
+            y : false
+        }
+
+        this.speed = Math.random() * 0.5;
+
+        this.interestPos = []
+        
+        this.startAngle = 2 * Math.PI * Math.random();        
+        let stepAngle = 2 * Math.PI / this.interests.length 
+
+        for(let i in this.interests) {
+            let angle = i * stepAngle + this.startAngle + (Math.random() - 0.5) * Math.PI / 3
+            
+            this.interestPos.push({
+                x : this.pos.x + interestDistance * Math.cos(angle),
+                y : this.pos.y + interestDistance * Math.sin(angle),
+                a : angle
+            })        
+        }
+    }
+
+    generateNewAim(){
+        this.aim = {
+            x : this.constPos.x + randomDirection() * 20,
+            y : this.constPos.y + randomDirection() * 20
+        }
+    }
+
+    resetFlag(){
+        this.flag = {
+            x : false,
+            y : false
+        }
     }
 
     draw(ctx) {
+
+        //drawing main circle (avatar) 
         ctx.beginPath();
         ctx.arc(this.pos.x,this.pos.y, personRadius, 0, 2 * Math.PI, false);
         ctx.lineWidth = 5;
         ctx.strokeStyle = '#003300';
         ctx.stroke();
         
-        let stepAngle = 2 * Math.PI / this.interests.length 
+        
         for(let i in this.interests) {
+            let interestX = this.pos.x + interestDistance * Math.cos(this.interestPos[i].a)
+            let interestY = this.pos.y + interestDistance * Math.sin(this.interestPos[i].a)
+            this.pos.y + interestDistance * Math.sin(this.interestPos[i].a)
+            // drawing circle for interest
             ctx.beginPath();
-            let angle = i * stepAngle + this.startAngle
-            let interestPos = {
-                x : this.pos.x + interestDistance * Math.cos(angle),
-                y : this.pos.y + interestDistance * Math.sin(angle)
-            }
-            ctx.arc(interestPos.x, interestPos.y, interestRadius, 0, 2 * Math.PI, false);
+            ctx.arc(interestX, interestY, interestRadius, 0, 2 * Math.PI, false);
             ctx.lineWidth = 5;
             ctx.strokeStyle = '#003300';
             ctx.stroke();
 
+            // drawing tentacle
             ctx.beginPath();
             ctx.fillStyle = "black";
-            ctx.fillText(this.interests[i], interestPos.x - this.interests[i].length * 0.5 * 5, interestPos.y);
+            ctx.moveTo(this.pos.x + personRadius * Math.cos(this.interestPos[i].a), 
+                       this.pos.y + personRadius * Math.sin(this.interestPos[i].a));
+
+            ctx.lineTo(interestX + interestRadius * Math.cos(this.interestPos[i].a + Math.PI), 
+                       interestY + interestRadius * Math.sin(this.interestPos[i].a + Math.PI));
+            ctx.stroke(); 
+
+            // drawing text
+            ctx.beginPath();
+            ctx.fillStyle = "black";
+            ctx.fillText(this.interests[i], interestX - this.interests[i].length * 0.5 * 5, interestY);
             ctx.fill();
+
+            
         }
     }
 
     update(){
-        // this.pos.x += 1;
+        if (Math.abs(this.pos.x - this.aim.x) > epsilon) {
+            if (this.pos.x > this.aim.x){
+                this.pos.x -= this.speed;
+            } else {
+                this.pos.x += this.speed;
+            }
+        } else {
+            this.flag.x = true
+            
+        }
+
+        if (Math.abs(this.pos.y - this.aim.y) > epsilon) {
+            if (this.pos.y > this.aim.x){
+                this.pos.y += this.speed;
+            } else {
+                this.pos.y -= this.speed;
+            }
+        } else {
+            this.flag.y = true
+            
+        }
+
+        console.log(this.flag);
+
+        if (this.flag.x && this.flag.y) {
+            this.generateNewAim();
+            this.resetFlag();
+        }
     }
 }
 
 
 let persons = [];
-let numOfPersons = 10; 
+let numOfPersons = 6; 
 
-let circleStepAngle = 2 * Math.PI / circleNum
+let circleNum = circleStartNum;
+let circleCounter = 0;
+let radiusCounter = 1;
 
+let randomStartAngle = 2 * Math.PI * Math.random()
 
-for(let i=0; i<=numOfPersons; i++){
+for(let i=0; i<numOfPersons; i++){
+    let circleStepAngle = 2 * Math.PI / circleNum
     let pos;
     if (i == 0){
         pos = {
-            x : 400,
-            y : 400
+            x : 700,
+            y : 700
         };
 
     } else {
-        radius = (Math.floor(i / (circleNum + 1)) + 1) * circleDistance;
-        // console.log(radius);
+        // radius = (Math.floor(i  / (circleNum + 1) + 1)) * circleDistance
+        radius = radiusCounter * circleDistance
         pos = {
-            x : 400 + radius * Math.cos(circleStepAngle * (i - 1 + 0.5 * ((Math.floor(i / (circleNum + 1))) % 2))),
-            y : 400 + radius * Math.sin(circleStepAngle * (i - 1 + 0.5 * ((Math.floor(i / (circleNum + 1))) % 2)))
+            x : 700 + radius * Math.cos(circleStepAngle * (i - 1) + randomStartAngle),
+            y : 700 + radius * Math.sin(circleStepAngle * (i - 1) + randomStartAngle)
         };
-        console.log(((Math.floor(i / circleNum)) % 2));
     }
     
     let person = new Person(["Harry Potter", "Machine Learning", "Fitness"], pos.x, pos.y)
 
     
     persons.push(person);
+    
+    circleCounter += 1;
+
+    if (circleCounter - 1 == circleNum){
+        circleCounter = 1;
+
+        circleNum += 6;        
+        radiusCounter += 1;
+    }
+    // console.log(circleStepAngle)
+    
 }
 
 function update(progress) {
