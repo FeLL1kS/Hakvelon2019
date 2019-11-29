@@ -1,13 +1,16 @@
 const personRadius = 50;
 const interestRadius = 50;
 const interestDistance = 120;
-const area = 2 * (personRadius + interestRadius + interestDistance + 20);
 const circleStartNum = 1;
 const circleDistance = 420;
-const maxCirlceDistance = 20;
+const maxCirlceDistance = 30;
 
 let cnv = document.getElementById("octoquarium")
 let ctx = cnv.getContext("2d");
+
+
+ctx.canvas.width  = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
 
 function randomDirection(){
     return Math.random() * 2 - 1;
@@ -51,7 +54,7 @@ class Person {
     generateNewAim(){
         this.aim = {
             x : this.constPos.x + randomDirection() * maxCirlceDistance,
-            y: this.constPos.y + randomDirection() * maxCirlceDistance
+            y : this.constPos.y + randomDirection() * maxCirlceDistance
         }
     }
 
@@ -139,7 +142,7 @@ class Person {
 
 
 let persons = [];
-let numOfPersons = 10;
+let numOfPersons = 50;
 
 let circleNum = circleStartNum;
 let circleCounter = 0;
@@ -152,16 +155,16 @@ for(let i=0; i<numOfPersons; i++){
     let pos;
     if (i == 0){
         pos = {
-            x : 700,
-            y : 700
+            x : window.innerWidth / 2,
+            y : window.innerHeight / 2
         };
 
     } else {
         // radius = (Math.floor(i  / (circleNum + 1) + 1)) * circleDistance
         radius = radiusCounter * circleDistance
         pos = {
-            x : 700 + radius * Math.cos(circleStepAngle * (i - 1) + randomStartAngle),
-            y : 700 + radius * Math.sin(circleStepAngle * (i - 1) + randomStartAngle)
+            x : window.innerWidth / 2 + radius * Math.cos(circleStepAngle * (i - 1) + randomStartAngle),
+            y : window.innerHeight / 2 + radius * Math.sin(circleStepAngle * (i - 1) + randomStartAngle)
         };
     }
 
@@ -178,8 +181,6 @@ for(let i=0; i<numOfPersons; i++){
         circleNum += 6;
         radiusCounter += 1;
     }
-    // console.log(circleStepAngle)
-
 }
 
 function update(progress) {
@@ -192,8 +193,8 @@ function update(progress) {
 
 function draw() {
     // Draw the state of the world
-    ctx.canvas.width  = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
+    // ctx.canvas.width  = window.innerWidth;
+    // ctx.canvas.height = window.innerHeight;
 
     ctx.clearRect(0, 0, cnv.width, cnv.height);
     for(person of persons){
@@ -213,4 +214,3 @@ function loop(timestamp) {
 
 let lastRender = 0;
 window.requestAnimationFrame(loop);
-
