@@ -33,4 +33,4 @@ export const INTEREST_DISTANCE = 120;
 /**
  * @constant APP_ROOT корень приложения, домен
  */
-export const APP_ROOT = 'https://hakvelon2019.wbydcloud.com';
+export const APP_ROOT = '';

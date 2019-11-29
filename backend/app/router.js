@@ -43,6 +43,14 @@ router.use((req, res, next) => {
     }
 });
 
+// TODO: If you really want to use this, please add more security to /admin route, cause in this case user can open it typing /admin.html in url
+router.use('/admin', (req, res, next) => {
+    if (req.session.user.role == 1) {
+        next();
+    } else {
+        res.sendFile(__dirname + '/../public/admin.html');
+    }
+});
 router.use(express.static(__dirname + '/../public'));
 router.use('/api/', api);
 router.use((req, res, next) => {
