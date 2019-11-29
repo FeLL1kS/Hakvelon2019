@@ -1,7 +1,7 @@
 const db = require('../components/db');
 const bcrypt = require('bcrypt-nodejs');
 
-const salt = bcryptNodejs.genSaltSync(10);
+const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
     auth: async (login, passwd) => {
