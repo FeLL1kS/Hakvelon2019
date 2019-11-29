@@ -2,7 +2,7 @@ const personRadius = 50;
 const interestRadius = 50;
 const interestDistance = 120;
 const circleStartNum = 1;
-const circleDistance = 420;
+const circleDistance = 430;
 const maxCirlceDistance = 30;
 
 let cnv = document.getElementById("octoquarium")
@@ -146,7 +146,7 @@ let numOfPersons = 50;
 
 let circleNum = circleStartNum;
 let circleCounter = 0;
-let radiusCounter = 1;
+let radiusCounter = 0;
 
 let randomStartAngle = 2 * Math.PI * Math.random()
 
@@ -160,7 +160,6 @@ for(let i=0; i<numOfPersons; i++){
         };
 
     } else {
-        // radius = (Math.floor(i  / (circleNum + 1) + 1)) * circleDistance
         radius = radiusCounter * circleDistance
         pos = {
             x : window.innerWidth / 2 + radius * Math.cos(circleStepAngle * (i - 1) + randomStartAngle),
@@ -173,13 +172,13 @@ for(let i=0; i<numOfPersons; i++){
 
     persons.push(person);
 
-    circleCounter += 1;
+    circleCounter++;
 
-    if (circleCounter - 1 == circleNum){
+    if (circleCounter % circleNum == 0) {
         circleCounter = 1;
 
         circleNum += 6;
-        radiusCounter += 1;
+        radiusCounter++;
     }
 }
 

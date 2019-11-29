@@ -24,7 +24,7 @@ export default async function api(path, data) {
                 name: 'Alex',
                 interests: [
                     'Coding',
-                    'Loli',
+                    'AI',
                     'Python'
                 ]
             },
