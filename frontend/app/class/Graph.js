@@ -15,7 +15,111 @@ export default class Graph {
         this.ctx.canvas.width = window.innerWidth;
         this.ctx.canvas.height = window.innerHeight;
 
-        this.scale = 1;
+        let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+        let xform = svg.createSVGMatrix();
+        this.ctx.getTransform = function () {
+            return xform;
+        };
+
+        let savedTransforms = [];
+        let save = this.ctx.save;
+        this.ctx.save = () => {
+            savedTransforms.push(xform.translate(0, 0));
+            return save.call(this.ctx);
+        };
+        let restore = this.ctx.restore;
+        this.ctx.restore = () => {
+            xform = savedTransforms.pop();
+            return restore.call(this.ctx);
+        };
+
+        let scale = this.ctx.scale;
+        this.ctx.scale = (sx, sy) => {
+            xform = xform.scaleNonUniform(sx, sy);
+            return scale.call(this.ctx, sx, sy);
+        };
+        let rotate = this.ctx.rotate;
+        this.ctx.rotate = (radians) => {
+            xform = xform.rotate(radians * 180 / Math.PI);
+            return rotate.call(this.ctx, radians);
+        };
+        let translate = this.ctx.translate;
+        this.ctx.translate = (dx, dy) => {
+            xform = xform.translate(dx, dy);
+            return translate.call(this.ctx, dx, dy);
+        };
+        let transform = this.ctx.transform;
+        this.ctx.transform = (a, b, c, d, e, f) => {
+            let m2 = svg.createSVGMatrix();
+            m2.a = a;
+            m2.b = b;
+            m2.c = c;
+            m2.d = d;
+            m2.e = e;
+            m2.f = f;
+            xform = xform.multiply(m2);
+            return transform.call(this.ctx, a, b, c, d, e, f);
+        };
+        let setTransform = this.ctx.setTransform;
+        this.ctx.setTransform = (a, b, c, d, e, f) => {
+            xform.a = a;
+            xform.b = b;
+            xform.c = c;
+            xform.d = d;
+            xform.e = e;
+            xform.f = f;
+            return setTransform.call(this.ctx, a, b, c, d, e, f);
+        };
+        let pt = svg.createSVGPoint();
+        this.ctx.transformedPoint = (x, y) => {
+            pt.x = x;
+            pt.y = y;
+            return pt.matrixTransform(xform.inverse());
+        };
+
+        this.scaleFactor = 1.1;
+
+        let lastX = this.canvas.width / 2;
+        let lastY = this.canvas.height / 2;
+        let dragStart;
+        let dragged;
+        this.canvas.addEventListener('mousedown', (event) => {
+            document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
+            lastX = event.offsetX || (event.pageX - this.canvas.offsetLeft);
+            lastY = event.offsetY || (event.pageY - this.canvas.offsetTop);
+            dragStart = this.ctx.transformedPoint(lastX, lastY);
+            dragged = false;
+        }, false);
+        this.canvas.addEventListener('mousemove', (event) => {
+            lastX = event.offsetX || (event.pageX - this.canvas.offsetLeft);
+            lastY = event.offsetY || (event.pageY - this.canvas.offsetTop);
+            dragged = true;
+            if (dragStart) {
+                let pt = this.ctx.transformedPoint(lastX, lastY);
+                this.ctx.translate(pt.x - dragStart.x, pt.y - dragStart.y);
+                draw();
+            }
+        }, false);
+        this.canvas.addEventListener('mouseup', (event) => {
+            dragStart = null;
+        }, false);
+
+
+        const zoom = (delta) => {
+            let pt = this.ctx.transformedPoint(lastX, lastY);
+            this.ctx.translate(pt.x, pt.y);
+            let factor = Math.pow(this.scaleFactor, delta);
+            this.ctx.scale(factor, factor);
+            this.ctx.translate(-pt.x, -pt.y);
+            this.draw();
+        };
+        const handleScroll = (event) => {
+            let delta = event.wheelDelta ? event.wheelDelta / 40 : event.detail ? -event.detail : 0;
+            if (delta) zoom(delta);
+            return event.preventDefault() && false;
+        };
+        this.canvas.addEventListener('DOMMouseScroll', handleScroll, false);
+        this.canvas.addEventListener('mousewheel', handleScroll, false);
 
         this.persons = [];
     }
@@ -63,14 +167,13 @@ export default class Graph {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        let p1 = this.ctx.transformedPoint(0, 0);
+        let p2 = this.ctx.transformedPoint(this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+
         for (let person of this.persons) {
             person.draw(this.ctx);
         }
-    }
-
-    scale(scale) {
-        // TODO: scale
     }
 
     animate() {
@@ -79,7 +182,7 @@ export default class Graph {
             this.draw();
 
             window.requestAnimationFrame(loop);
-        }
+        };
         window.requestAnimationFrame(loop);
     }
 }

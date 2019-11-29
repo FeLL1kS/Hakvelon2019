@@ -31,13 +31,13 @@ export default class Person {
         let stepAngle = 2 * Math.PI / this.person.interests.length;
 
         for (let i in this.person.interests) {
-            let angle = i * stepAngle + this.startAngle + (Math.random() - 0.5) * Math.PI / 3
+            let angle = i * stepAngle + this.startAngle + (Math.random() - 0.5) * Math.PI / 3;
 
             this.interestPos.push({
                 x: this.pos.x + INTEREST_DISTANCE * Math.cos(angle),
                 y: this.pos.y + INTEREST_DISTANCE * Math.sin(angle),
                 a: angle
-            })
+            });
         }
     }
 
@@ -45,14 +45,14 @@ export default class Person {
         this.aim = {
             x: this.constPos.x + (Math.random() * 2 - 1) * PERSON_MAX_NEW_AIM_DISTANCE,
             y: this.constPos.y + (Math.random() * 2 - 1) * PERSON_MAX_NEW_AIM_DISTANCE
-        }
+        };
     }
 
     resetFlag() {
         this.flag = {
             x: false,
             y: false
-        }
+        };
     }
 
     draw(ctx) {
@@ -66,9 +66,8 @@ export default class Person {
 
 
         for (let i in this.person.interests) {
-            let interestX = this.pos.x + INTEREST_DISTANCE * Math.cos(this.interestPos[i].a)
-            let interestY = this.pos.y + INTEREST_DISTANCE * Math.sin(this.interestPos[i].a)
-            this.pos.y + INTEREST_DISTANCE * Math.sin(this.interestPos[i].a)
+            let interestX = this.pos.x + INTEREST_DISTANCE * Math.cos(this.interestPos[i].a);
+            let interestY = this.pos.y + INTEREST_DISTANCE * Math.sin(this.interestPos[i].a);
             // drawing circle for interest
             ctx.beginPath();
             ctx.arc(interestX, interestY, INTEREST_RADIUS, 0, 2 * Math.PI, false);
