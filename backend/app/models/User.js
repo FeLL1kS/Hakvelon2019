@@ -7,7 +7,7 @@ module.exports = {
     auth: async (login, passwd) => {
         let res = (await db.query(`select user_id, password, role from users where login = $1 limit 1`, [login])).rows;
 
-        if (res && (res = res[0]) && await bcrypt.compare(passwd, res.password)) return res.user_id;
+        if (res && (res = res[0]) && bcrypt.compareSync(passwd, res.password)) return res.user_id;
 
         return false;
     },
