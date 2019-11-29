@@ -31,9 +31,12 @@ export default async function api(path, data) {
         ];
     }
 
-    let url = [ APP_ROOT.trim('/'), 'api', path].join('/');
+    let url = [ APP_ROOT.trimRight('/'), 'api', path].join('/');
     let response = await fetch(url, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         data: JSON.stringify(data)
     });
     let result = await response.json();

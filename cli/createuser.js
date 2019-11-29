@@ -4,8 +4,8 @@ const db = require('../backend/app/components/db');
 
 let login = process.argv[2] || false;
 let name = process.argv[3] || false;
-let role = process.argv[4] || 1;
-let interests = process.argv[5] || '';
+let role = process.argv[4];
+let interests = process.argv[5];
 
 if (!name) name = readlineSync.question('Name: ');
 if (!name) throw new Error('you should tell me users name!');
@@ -18,7 +18,7 @@ let password = readlineSync.question('Password: ', {
 });
 if (!password) throw new Error('you should tell me users password!');
 
-if (!role) role = readlineSync.question('[Role (1-10)](0 by default): ') || 0;
+if (!role) role = readlineSync.question('[Role (1-10)](1 by default): ') || 1;
 if (!interests) interests = readlineSync.question('[Interests]("" by default): ') || '';
 
 (async () => {
