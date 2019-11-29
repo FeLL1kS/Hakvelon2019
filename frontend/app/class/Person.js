@@ -20,6 +20,9 @@ export default class Person {
             y: y
         };
 
+        this.mouseDown = false;
+        this.selected = false;
+
         this.generateNewAim();
         this.resetFlag();
 
@@ -39,6 +42,8 @@ export default class Person {
                 a: angle
             });
         }
+
+        this.onclick = () => true;
     }
 
     generateNewAim() {
@@ -63,10 +68,28 @@ export default class Person {
 
         if (ctx.isPointInPath(mouse.x, mouse.y)) {
             nameFlag = true;
+            
+            if (this.mouseDown != mouse.down){
+                this.mouseDown = mouse.down
+                if (mouse.down) {  
+                    if (this.onclick()) {
+                        this.selected = !this.selected;
+                    }
+                    
+
+                    
+                } 
+            }            
         }        
 
         ctx.lineWidth = 5;
-        ctx.strokeStyle = '#003300';
+
+        if (this.selected){
+            ctx.strokeStyle = "#e36d42";
+        } else {
+            ctx.strokeStyle = '#003300';
+        }
+        
         ctx.stroke();
 
         if (nameFlag) {
