@@ -31,7 +31,6 @@ class Person {
         };
 
         this.generateNewAim();
-
         this.resetFlag();
 
         this.speed = Math.random() * 0.5;
