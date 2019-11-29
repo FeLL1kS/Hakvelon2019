@@ -12,9 +12,25 @@ function ValidationError(property) {
     }
 
 }
-
 ValidationError.prototype = Object.create(Error.prototype);
 
-module.exports ={
-    ValidationError
+function AccessError(property) {
+    Error.call(this, property);
+    this.name = "AccessError";
+
+    this.property = property;
+    this.message = "Access error for " + property;
+
+    if (Error.captureStackTrace) {
+        Error.captureStackTrace(this, AccessError);
+    } else {
+        this.stack = (new Error()).stack;
+    }
+
 }
+AccessError.prototype = Object.create(Error.prototype);
+
+module.exports ={
+    ValidationError,
+    AccessError
+};
