@@ -5,3 +5,4 @@ logs
 dist
 
 .vscode
+app.js*
