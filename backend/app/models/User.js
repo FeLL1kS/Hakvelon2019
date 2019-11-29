@@ -1,5 +1,5 @@
 const db = require('../components/db');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 const saltRounds = 10;
 
