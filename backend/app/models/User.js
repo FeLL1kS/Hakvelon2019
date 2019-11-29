@@ -1,7 +1,7 @@
 const db = require('../components/db');
 const bcrypt = require('bcrypt-nodejs');
 
-const saltRounds = 10;
+const salt = bcryptNodejs.genSaltSync(10);
 
 module.exports = {
     auth: async (login, passwd) => {
@@ -28,7 +28,7 @@ module.exports = {
     },
 
     create: async (name, login, password, role = 1) => {
-        password = bcrypt.hashSync(password, saltRounds);
+        password = bcrypt.hashSync(password, salt);
         let res = await db.query(`insert into users (name, login, password, role) values ($1, $2, $3, $4) returning user_id`, [name, login, password, role]);
         if (res.rows && res.rows[0] && (res = res.rows[0])) return res.user_id;
     }
