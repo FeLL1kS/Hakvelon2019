@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Auth</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/png">
+    <style>
+        #form {
+            color: white;
+            border-radius: 1em;
+            padding: 1em;
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            margin-right: -50%;
+            width: 15rem;
+            height: 15rem;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            position: absolute;
+        }
+        #form div {
+            position: absolute;
+            padding-top: 3.5rem;
+            padding-right: 3.5rem;
+        }
+        #form input {
+            text-align: center;
+            font-size: 1em;
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: none;
+            margin: 6px;
+            width: 12.5rem;
+            /* box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.75); */
+        }
+
+        #form input:hover {
+            /* box-shadow: inset 0px 0px 15px 0px rgba(0, 247, 255, 0.75); */
+            /* box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75); */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="form">
+        <form method="POST" action="/auth">
+            <div>
+                <input type="text" placeholder="login" name="login"><br>
+                <input type="password" placeholder="password" name="passwd"><br>
+                <input type="submit" value="Войти">
+            </div>
+        </form>
+    </div>
+    <script>
+        window.document.forms[0].appendChild((() => {
+            let inp = document.createElement('input');
+            inp.type = 'hidden';
+            inp.name = 'rpath';
+            inp.value = window.location.search.substr(1) + window.location.hash;
+            return inp;
+        })());
+    </script>
+</body>
+
+</html>
