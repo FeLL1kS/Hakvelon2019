@@ -5,31 +5,51 @@ const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
     auth: async (login, passwd) => {
-        let res = (await db.query(`select user_id, password, role from users where login = $1 limit 1`, [login])).rows;
+        let user = (await db.query(`select user_id, password, role from users where login = $1 limit 1`, [login])).rows;
 
-        if (res && (res = res[0]) && bcrypt.compareSync(passwd, res.password)) return res.user_id;
+        if (user && (user = user[0]) && bcrypt.compareSync(passwd, user.password)) {
+            delete user.password;
+            return user;
+        }
 
-        return false;
-    },
-
-    load: async (user_id) => {
-        let result = (await db.query(`select user_id, name, role from users where user_id = $1 limit 1`, [user_id])).rows[0] || false;
-        return result;
+        return null;
     },
 
     getAll: async () => {
-        let result = (await db.query(`select * from users`)).rows;
+        let result = (await db.query(`select * from users where user_id > 0`)).rows;
+        result = result.map(user => {
+            delete user.password;
+            return user;
+        });
+        return result;
+    },
+
+    getList: async () => {
+        let result = (await db.query(`select user_id, name, interests from users where user_id > 0`)).rows;
         return result;
     },
 
     getById: async (user_id) => {
-        let result = (await db.query(`select * from users`)).rows;
-        return result[0] ? result[0] : null;
+        let result = (await db.query(`select * from users where user_id = $1 limit 1`, [ user_id ])).rows[0];
+        if (result) {
+            delete user.password;
+            return result;
+        } else return null;
     },
 
-    create: async (name, login, password, role = 1) => {
+    create: async (name, login, password, role = 1, interests = '') => {
         password = bcrypt.hashSync(password, salt);
-        let res = await db.query(`insert into users (name, login, password, role) values ($1, $2, $3, $4) returning user_id`, [name, login, password, role]);
+        let res = await db.query(`
+            insert into users (
+                name,
+                login,
+                password,
+                role,
+                interests
+            ) values (
+                $1, $2, $3, $4, $5
+            ) returning user_id
+        `, [ name, login, password, role, interests ]);
         if (res.rows && res.rows[0] && (res = res.rows[0])) return res.user_id;
     }
 };

@@ -17,9 +17,9 @@ router.use('/auth', express.static(__dirname + '/../public/auth.html'));
 
 router.post('/auth', async (req, res, next) => {
     if (req.body.login && req.body.passwd) {
-        let user_id = await User.auth(req.body.login, req.body.passwd);
-        if (user_id) {
-            req.session.user_id = user_id;
+        let user = await User.auth(req.body.login, req.body.passwd);
+        if (user) {
+            req.session.user = user;
             let token = generateToken(64);
             req.session.token = token;
             res.cookie('tkn', token);
@@ -36,7 +36,7 @@ router.get('/logout', (req, res, next) => {
     res.redirect('/auth');
 });
 router.use((req, res, next) => {
-    if (!req.session.user_id || !req.session.token || !req.cookies.tkn || !(req.session.token == req.cookies.tkn)) {
+    if (!req.session.user || !req.session.token || !req.cookies.tkn || !(req.session.token == req.cookies.tkn)) {
         res.status(403).redirect('/auth?' + req.originalUrl);
     } else {
         next();

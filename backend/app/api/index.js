@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    ValidationError
+    ValidationError,
+    AccessError
 } = require('../class/Error');
 const logger = require('../components/logger')('api');
 
@@ -17,7 +18,7 @@ for (let model in api) {
 
         router.post(path, async (req, res) => {
             try {
-                let data = handler(req.body);
+                let data = handler(req.body, req.session.user);
                 res.json({
                     success: true,
                     data
@@ -27,6 +28,13 @@ for (let model in api) {
                     return res.json({
                         success: false,
                         error: 400,
+                        message: error.message
+                    });
+                }
+                if (error instanceof AccessError) {
+                    return res.json({
+                        success: false,
+                        error: 403,
                         message: error.message
                     });
                 }
