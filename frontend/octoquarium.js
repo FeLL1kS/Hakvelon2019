@@ -68,13 +68,12 @@ for(let i=0; i<=numOfPersons; i++){
         };
 
     } else {
-        radius = (Math.floor(i / (circleNum + 1)) + 1) * circleDistance;
-        // console.log(radius);
+        radius = (Math.floor(i / (circleNum + 1)) + 1) * circleDistance
         pos = {
             x : 400 + radius * Math.cos(circleStepAngle * (i - 1 + 0.5 * ((Math.floor(i / (circleNum + 1))) % 2))),
             y : 400 + radius * Math.sin(circleStepAngle * (i - 1 + 0.5 * ((Math.floor(i / (circleNum + 1))) % 2)))
         };
-        console.log(((Math.floor(i / circleNum)) % 2));
+        console.log(radius);
     }
     
     let person = new Person(["Harry Potter", "Machine Learning", "Fitness"], pos.x, pos.y)
