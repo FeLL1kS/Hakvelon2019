@@ -22,6 +22,11 @@ module.exports = {
         return result;
     },
 
+    getById: async (user_id) => {
+        let result = (await db.query(`select * from users`)).rows;
+        return result[0] ? result[0] : null;
+    },
+
     create: async (name, login, password, role = 1) => {
         password = bcrypt.hashSync(password, saltRounds);
         let res = await db.query(`insert into users (name, login, password, role) values ($1, $2, $3, $4) returning user_id`, [name, login, password, role]);
