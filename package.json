@@ -1,0 +1,30 @@
+{
+  "name": "hakvelon2019",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm i -g webpack webpack-cli pm2; cd backend && npm install; cd ../frontend && npm install",
+    "server": "pm2 start ./backend/pm2.config.js",
+    "server-stop": "pm2 stop hakvelon2019/backend",
+    "server-wath": "pm2 start ./backend/pm2.config.js --watch",
+    "server-stop-wath": "pm2 stop hakvelon2019/backend --watch",
+    "build": "webpack --config ./frontend/webpack.config.js --mode production",
+    "build-dev": "webpack --config ./frontend/webpack.config.js --mode development",
+    "bulid-watch": "webpack --config ./frontend/webpack.config.js --mode development --watch",
+    "dev": "webpack --config ./frontend/webpack.config.js --mode development & pm2 start ./backend/pm2.config.js --watch && pm2 logs hakvelon2019/backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wannabeyourdrug/Hakvelon2019.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wannabeyourdrug/Hakvelon2019/issues"
+  },
+  "homepage": "https://github.com/wannabeyourdrug/Hakvelon2019",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}

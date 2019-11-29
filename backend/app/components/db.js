@@ -7,6 +7,6 @@ const db = new Client({
     connectionString: config.db.pgsql_uri
 });
 
-// db.connect();
+db.connect();
 
 module.exports = db;
