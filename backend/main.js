@@ -3,7 +3,7 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const favicon = require('serve-favicon')
+const favicon = require('serve-favicon');
 
 const logger = require('./app/components/logger')('server');
 const session = require('./app/components/session');
