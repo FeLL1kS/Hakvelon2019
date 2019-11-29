@@ -120,15 +120,27 @@ export default class Graph {
 
         this.mouse = {
             x : 0,
-            y : 0
+            y : 0,
+            down : false
         }
 
         this.canvas.onmousemove = (e) => {
-            this.mouse.x = e.clientX
-            this.mouse.y = e.clientY
+            this.mouse.x = e.clientX;
+            this.mouse.y = e.clientY;
+        }
+
+        this.canvas.onmousedown = (e) => {
+            this.mouse.down = true;
+        }
+
+        this.canvas.onmouseup = (e) => {
+            this.mouse.down = false;
         }
 
         this.persons = [];
+
+        this.selectedPersons = [null,null]
+        this.inputs = [document.getElementById("person1"), document.getElementById("person2")]
     }
 
     build(persons) {
@@ -162,7 +174,32 @@ export default class Graph {
                 radiusCounter++;
             }
 
-            return new Person(person, pos.x, pos.y, this.canvas);
+            let personObject = new Person(person, pos.x, pos.y, this.canvas);
+
+
+            personObject.onclick = () => {
+                if (!this.selectedPersons[0]) {
+                    this.selectedPersons[0] = personObject;
+                    this.inputs[0].value = this.selectedPersons[0].person.name;
+                    return true;
+                } else if (this.selectedPersons[0] == personObject){
+                    this.selectedPersons[0] = null;
+                    this.inputs[0].value = "";
+                    return true;
+                }
+                if (!this.selectedPersons[1]) {
+                    this.selectedPersons[1] = personObject;
+                    this.inputs[1].value = this.selectedPersons[1].person.name;
+                    return true;
+                } else if (this.selectedPersons[1] == personObject){
+                    this.selectedPersons[1] = null;
+                    this.inputs[1].value = "";
+                    return true;
+                }
+
+                return false;
+            }
+            return personObject;
         });
         console.log(this.persons);
     }
@@ -174,6 +211,7 @@ export default class Graph {
     }
 
     draw() {
+        // console.log(this.selectedPersons);
         let p1 = this.ctx.transformedPoint(0, 0);
         let p2 = this.ctx.transformedPoint(this.canvas.width, this.canvas.height);
         this.ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
@@ -191,5 +229,14 @@ export default class Graph {
             window.requestAnimationFrame(loop);
         };
         window.requestAnimationFrame(loop);
+    }
+
+
+    clearSelection (selectionID){
+        if (this.selectedPersons[selectionID]) {
+            this.selectedPersons[selectionID].selected = false;
+        }
+        this.selectedPersons[selectionID] = null;
+        this.inputs[selectionID].value = "";
     }
 }
