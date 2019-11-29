@@ -30,10 +30,10 @@ module.exports = {
     },
 
     getById: async (user_id) => {
-        let result = (await db.query(`select * from users where user_id = $1 limit 1`, [ user_id ])).rows[0];
-        if (result) {
+        let user = (await db.query(`select * from users where user_id = $1 limit 1`, [user_id])).rows[0];
+        if (user) {
             delete user.password;
-            return result;
+            return user;
         } else return null;
     },
 

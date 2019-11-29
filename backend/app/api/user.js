@@ -8,7 +8,8 @@ module.exports = {
     async getAll({}, {  // jshint ignore:line
         role
     }) {
-        if (user.role == 1) throw new AccessError('user/getAll');
+        console.log(arguments);
+        if (role == 1) throw new AccessError('user/getAll');
         return User.getAll();
     },
 
@@ -20,7 +21,7 @@ module.exports = {
         user_id
     }) {
         if (!user_id || typeof user_id !== 'number') throw new ValidationError('user_id');
-        return User.getById();
+        return User.getById(user_id);
     },
 
     async create({

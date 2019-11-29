@@ -18,7 +18,7 @@ for (let model in api) {
 
         router.post(path, async (req, res) => {
             try {
-                let data = handler(req.body, req.session.user);
+                let data = await handler(req.body, req.session.user);
                 res.json({
                     success: true,
                     data
@@ -49,5 +49,13 @@ for (let model in api) {
         });
     }
 }
+
+router.use((req, res) => {
+    res.json({
+        success: false,
+        error: 404,
+        message: 'Not found'
+    });
+});
 
 module.exports = router;
