@@ -9,7 +9,7 @@ import {
  * @class Person
  */
 export default class Person {
-    constructor(person, x, y) {
+    constructor(person, x, y, canvas) {
         this.person = person;
         this.pos = {
             x: x,
@@ -55,14 +55,27 @@ export default class Person {
         };
     }
 
-    draw(ctx) {
-
+    draw(ctx, mouse) {
+        let nameFlag = false;
         //drawing main circle (avatar)
         ctx.beginPath();
         ctx.arc(this.pos.x, this.pos.y, PERSON_RADIUS, 0, 2 * Math.PI, false);
+
+        if (ctx.isPointInPath(mouse.x, mouse.y)) {
+            nameFlag = true;
+        }        
+
         ctx.lineWidth = 5;
         ctx.strokeStyle = '#003300';
         ctx.stroke();
+
+        if (nameFlag) {
+            // drawing name
+            ctx.beginPath();
+            ctx.fillStyle = "black";
+            ctx.fillText(this.person.name, this.pos.x - this.person.name.length * 0.5 * 5, this.pos.y);
+            ctx.fill();
+        }
 
 
         for (let i in this.person.interests) {
@@ -90,9 +103,9 @@ export default class Person {
             ctx.fillStyle = "black";
             ctx.fillText(this.person.interests[i], interestX - this.person.interests[i].length * 0.5 * 5, interestY);
             ctx.fill();
-
-
         }
+
+
     }
 
     update() {
