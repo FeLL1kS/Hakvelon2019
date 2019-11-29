@@ -8,7 +8,6 @@ module.exports = {
     async getAll({}, {  // jshint ignore:line
         role
     }) {
-        console.log(arguments);
         if (role == 1) throw new AccessError('user/getAll');
         return User.getAll();
     },
