@@ -14,6 +14,7 @@ function generateToken(n) {
 }
 
 router.use('/auth', express.static(__dirname + '/../public/auth.html'));
+
 router.post('/auth', async (req, res, next) => {
     if (req.body.login && req.body.passwd) {
         let user_id = await User.auth(req.body.login, req.body.passwd);
