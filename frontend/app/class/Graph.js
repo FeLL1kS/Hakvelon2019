@@ -82,22 +82,19 @@ export default class Graph {
         let lastX = this.canvas.width / 2;
         let lastY = this.canvas.height / 2;
         let dragStart;
-        let dragged;
         this.canvas.addEventListener('mousedown', (event) => {
             document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
             lastX = event.offsetX || (event.pageX - this.canvas.offsetLeft);
             lastY = event.offsetY || (event.pageY - this.canvas.offsetTop);
             dragStart = this.ctx.transformedPoint(lastX, lastY);
-            dragged = false;
         }, false);
         this.canvas.addEventListener('mousemove', (event) => {
             lastX = event.offsetX || (event.pageX - this.canvas.offsetLeft);
             lastY = event.offsetY || (event.pageY - this.canvas.offsetTop);
-            dragged = true;
             if (dragStart) {
                 let pt = this.ctx.transformedPoint(lastX, lastY);
                 this.ctx.translate(pt.x - dragStart.x, pt.y - dragStart.y);
-                draw();
+                this.draw();
             }
         }, false);
         this.canvas.addEventListener('mouseup', (event) => {
@@ -120,6 +117,16 @@ export default class Graph {
         };
         this.canvas.addEventListener('DOMMouseScroll', handleScroll, false);
         this.canvas.addEventListener('mousewheel', handleScroll, false);
+
+        this.mouse = {
+            x : 0,
+            y : 0
+        }
+
+        this.canvas.onmousemove = (e) => {
+            this.mouse.x = e.clientX
+            this.mouse.y = e.clientY
+        }
 
         this.persons = [];
     }
@@ -155,7 +162,7 @@ export default class Graph {
                 radiusCounter++;
             }
 
-            return new Person(person, pos.x, pos.y);
+            return new Person(person, pos.x, pos.y, this.canvas);
         });
         console.log(this.persons);
     }
@@ -172,7 +179,7 @@ export default class Graph {
         this.ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 
         for (let person of this.persons) {
-            person.draw(this.ctx);
+            person.draw(this.ctx, this.mouse);
         }
     }
 
