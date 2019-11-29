@@ -11,7 +11,7 @@
     "server-stop-wath": "pm2 stop hakvelon2019/backend --watch",
     "build": "webpack --config ./frontend/webpack.config.js --mode production",
     "build-dev": "webpack --config ./frontend/webpack.config.js --mode development",
-    "bulid-watch": "webpack --config ./frontend/webpack.config.js --mode development --watch",
+    "build-watch": "webpack --config ./frontend/webpack.config.js --mode development --watch",
     "dev": "webpack --config ./frontend/webpack.config.js --mode development & pm2 start ./backend/pm2.config.js --watch && pm2 logs hakvelon2019/backend"
   },
   "repository": {

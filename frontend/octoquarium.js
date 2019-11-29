@@ -4,7 +4,6 @@ const interestDistance = 120;
 const area = 2 * (personRadius + interestRadius + interestDistance + 20);
 const circleStartNum = 1;
 const circleDistance = 420;
-const epsilon = 4;
 const maxCirlceDistance = 20;
 
 let cnv = document.getElementById("octoquarium")
@@ -28,15 +27,8 @@ class Person {
             y : y
         };
 
-        this.aim = {
-            x: this.constPos.x + randomDirection() * maxCirlceDistance,
-            y: this.constPos.y + randomDirection() * maxCirlceDistance
-        };
-
-        this.flag = {
-            x : false,
-            y : false
-        }
+        this.generateNewAim();
+        this.resetFlag();
 
         this.speed = Math.random() * 0.5;
 
@@ -58,8 +50,8 @@ class Person {
 
     generateNewAim(){
         this.aim = {
-            x : this.constPos.x + randomDirection() * 20,
-            y : this.constPos.y + randomDirection() * 20
+            x : this.constPos.x + randomDirection() * maxCirlceDistance,
+            y: this.constPos.y + randomDirection() * maxCirlceDistance
         }
     }
 
@@ -139,9 +131,7 @@ class Person {
         }
 
         if (this.flag.x && this.flag.y) {
-            console.log('>', this.aim);
             this.generateNewAim();
-            console.log('<', this.aim);
             this.resetFlag();
         }
     }
@@ -149,7 +139,7 @@ class Person {
 
 
 let persons = [];
-let numOfPersons = 1;
+let numOfPersons = 10;
 
 let circleNum = circleStartNum;
 let circleCounter = 0;
