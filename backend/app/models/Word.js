@@ -1,8 +1,7 @@
-const WordNet = require('node-wordnet');
-const wordnet = new WordNet();
+const db = require('thesaurus-com');
 
 module.exports = {
     lookup: async (word) => {
-        return wordnet.lookupAsync(word);
+        return db.search(word);
     }
 };
