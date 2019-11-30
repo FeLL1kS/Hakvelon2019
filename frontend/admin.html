@@ -5,48 +5,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://bootadmin.net/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <link rel="stylesheet" href="https://bootadmin.net/css/datatables.min.css">
+    <link rel="stylesheet" href="https://bootadmin.net/css/fullcalendar.min.css">
+    <link rel="stylesheet" href="https://bootadmin.net/css/bootadmin.min.css">
+
     <title>Admin | SocialGraph</title>
 
     <script>
-        async function api(path, data) {
+        async function api(path, data = {}) {
             // TODO: REmove it
-            if (path == 'user/getList') {
-                return [{
-                        name: 'Oleg',
-                        interests: [
-                            'Gay Porn',
-                            'Loli'
-                        ]
-                    },
-                    {
-                        name: 'Danila',
-                        interests: [
-                            'Coding',
-                            'Loli',
-                            'Cats',
-                            'JavaScrpit'
-                        ]
-                    },
-                    {
-                        name: 'Alex',
-                        interests: [
-                            'Coding',
-                            'AI',
-                            'Python'
-                        ]
-                    },
-                ];
+            if (path == 'user/getAll') {
+                return [{"user_id":2,"login":"oleg","name":"Oleg","role":1,"interests":"Gay Porn, Loli"},{"user_id":3,"login":"danila","name":"Danila","role":5,"interests":"Coding, Loli, Cats, JavaScript"},{"user_id":4,"login":"alex","name":"Alex","role":1,"interests":"Coding, Python, Alex"},{"user_id":1,"login":"admin","name":"Administrator","role":5,"interests":""}];
             }
 
-            let url = [APP_ROOT.trimRight('/'), 'api', path].join('/');
+            let url = [ '', 'api', path].join('/');
             let response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data: JSON.stringify(data)
+                body: JSON.stringify(data)
             });
             let result = await response.json();
 
@@ -63,7 +44,7 @@
 
 <body class="bg-light">
 
-    <nav class="navbar navbar-expand navbar-dark bg-primary" style="display: none;">
+    <nav class="navbar navbar-expand navbar-dark bg-primary" style="">
         <a class="sidebar-toggle mr-3" href="#"><i class="fa fa-bars"></i></a>
         <a class="navbar-brand" href="#">SocialGraph | Admin Panel</a>
 
@@ -81,7 +62,7 @@
     </nav>
 
 
-    <div class="d-flex" style="display: none !important;">
+    <div class="d-flex" style="">
 
         <!-- Sidebar -->
         <div class="sidebar sidebar-dark bg-dark">
@@ -131,7 +112,7 @@
         <!-- /Root -->
 
         <!-- Users -->
-        <div class="content p-4 Users" style="display: none !important;">
+        <div class="content p-4 Users" style="">
 
             <div class="card mb-4">
                 <div class="card-header bg-white font-weight-bold md-4" style="font-size: 2rem;">
@@ -212,50 +193,15 @@
                     <table id="example" class="table table-hover" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Name</th>
-                                <th>Interests</th>
                                 <th>Login</th>
-                                <th>Gender</th>
+                                <th>Interests</th>
                                 <th class="actions">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="users">
-                            <tr>
-                                <td>Oleg</td>
-                                <td>sssss</td>
-                                <td>FeLL1kS</td>
-                                <td>M</td>
-                                <td>
-                                    <a href="#" class="btn btn-icon btn-pill btn-primary" data-toggle="tooltip"
-                                        title="Edit"><i class="fa fa-fw fa-edit"></i></a>
-                                    <a href="#" class="btn btn-icon btn-pill btn-danger" data-toggle="tooltip"
-                                        title="Delete"><i class="fa fa-fw fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Sanya</td>
-                                <td>sssss</td>
-                                <td>elexir</td>
-                                <td>M</td>
-                                <td>
-                                    <a href="#" class="btn btn-icon btn-pill btn-primary" data-toggle="tooltip"
-                                        title="Edit"><i class="fa fa-fw fa-edit"></i></a>
-                                    <a href="#" class="btn btn-icon btn-pill btn-danger" data-toggle="tooltip"
-                                        title="Delete"><i class="fa fa-fw fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Danila</td>
-                                <td>sssss</td>
-                                <td>wannabeyourdrug</td>
-                                <td>F</td>
-                                <td>
-                                    <a href="#" class="btn btn-icon btn-pill btn-primary" data-toggle="tooltip"
-                                        title="Edit"><i class="fa fa-fw fa-edit"></i></a>
-                                    <a href="#" class="btn btn-icon btn-pill btn-danger" data-toggle="tooltip"
-                                        title="Delete"><i class="fa fa-fw fa-trash"></i></a>
-                                </td>
-                            </tr>
+                           
                         </tbody>
                     </table>
                 </div>
@@ -423,26 +369,28 @@
                 }
             };
 
-            let users = await api("user/getAll")
+            let users = await api("user/getAll");
 
             function getTd(data){
-                let td = document.createElement("td")
-                td.InnerHTML = data;
+                let td = document.createElement("td");
+                td.innerHTML = data;
                 return td;
             }
-            
+
             for(user of users){
                 let tr = document.createElement("tr");
-                tr.appendChild(getTd(tr.id));
-                tr.appendChild(getTd(tr.name));
-                tr.appendChild(getTd(tr.login));
-                tr.appendChild(getTd(tr.interests));
+                tr.appendChild(getTd(user.user_id));
+                tr.appendChild(getTd(user.name));
+                tr.appendChild(getTd(user.login));
+                tr.appendChild(getTd(user.interests));
+                tr.appendChild(getTd(`<a href="#" class="btn btn-icon btn-pill btn-primary" data-toggle="tooltip"
+                title="Edit"><i class="fa fa-fw fa-edit"></i></a>    <a href="#" class="btn btn-icon btn-pill btn-danger" data-toggle="tooltip"
+                title="Delete"><i class="fa fa-fw fa-trash"></i></a>`));
+                
                 document.getElementById("users").appendChild(tr);
             }
         };
     </script>
-
-
 
 </body>
 
