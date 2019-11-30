@@ -15,7 +15,7 @@ const names = ((_) => {
 const minWords = 3;
 const maxWords = 7;
 
-const users = 30;
+const users = 40;
 
 
 const User = require('../backend/app/models/User');

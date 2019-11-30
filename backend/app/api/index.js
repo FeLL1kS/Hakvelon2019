@@ -56,13 +56,13 @@ for (let model in api) {
 
 router.post('/upload', multer({ dest: UPLOADS_PATH }).single("avatar"), (req, res) => {
     let user_id = req.body.user_id;
-    if (!user_id || parseInt(user_id) !== user_id) return res.json({
+    if (!user_id) return res.json({
         success: false,
         error: 400,
-        message: error.message
+        message: 'Error validating user_id'
     });
 
-    fs.renameSync(UPLOADS_PATH + '/' + req.file.filename, UPLOADS_PATH + '/' + user_id + '.jpg');
+    require('fs').renameSync(UPLOADS_PATH + '/' + req.file.filename, UPLOADS_PATH + '/' + user_id + '.jpg');
 
     res.json({
         success: true,

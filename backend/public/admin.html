@@ -243,7 +243,7 @@
                                     изображения в выделенную область</p>
                                 <p class="onload">Загрузка... <i class="fad fa-refresh fa-spin"></i></p>
                                 <input type="file" id="addFile" multiple accept="image/*">
-                                <input id="hiddenInput" type="hidden" name="user" value="1" />
+                                <input id="hiddenInput" type="hidden" name="user" value="" />
                             </form>
                         </div>
 
@@ -483,10 +483,10 @@
                 }
 
                 async function uploadFile(file) {
-                    let url = '/api/uploads/';
+                    let url = '/api/upload/';
                     let formData = new FormData();
 
-                    let user_id = document.getElementById('#hiddenInput').value;
+                    let user_id = document.getElementById('hiddenInput').value;
                     formData.append('user_id', user_id);
                     formData.append('avatar', file);
                     try {
@@ -535,11 +535,11 @@
                     });
                     return false;
                 });
-  
+
                 $('#addImage').on('show.bs.modal', function (event) {
                     var button = $(event.relatedTarget) // Button that triggered the modal
                     let user_id = button.data('user-id');
-                    document.getElementById('#hiddenInput').value = user_id;
+                    document.getElementById('hiddenInput').value = user_id;
                 })
             };
         </script>
