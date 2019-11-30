@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>SocialGraph</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/png">
     <style>
         body {
             overflow: hidden;
@@ -16,13 +16,15 @@
             text-align: center;
         }
 
-        #compare-block {
+        #match-block {
             margin-top: 5px;
         }
     </style>
 </head>
+
 <body>
     <canvas id="canvas"></canvas>
+
     <div id="toolbar">
         <div id="tools">
             <div id="inputs">
@@ -31,11 +33,15 @@
                 <input id="person2" type="text">
                 <button id="clearPerson2">X</button>
             </div>
-            <div id="compare-block">
-                <button>Compare</button>
+            <div id="match-block">
+                <button id="match">Match</button>
             </div>
+
         </div>
+
     </div>
+
     <script type="text/javascript" src="app.js"></script>
 </body>
+
 </html>
