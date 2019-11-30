@@ -51,5 +51,9 @@ module.exports = {
             ) returning user_id
         `, [ name, login, password, role, interests ]);
         if (res.rows && res.rows[0] && (res = res.rows[0])) return res.user_id;
+    },
+
+    delete: async (user_id) => {
+        await db.query(`delete from users where user_id = $1 and user_id > 0`, [user_id]);
     }
 };
