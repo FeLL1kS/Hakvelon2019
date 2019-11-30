@@ -8,7 +8,8 @@ export default async function api(path, data) {
                 name: 'Oleg',
                 interests: [
                     'Gay Porn',
-                    'Loli'
+                    'Loli',
+                    "AI"
                 ]
             },
             {
@@ -17,7 +18,9 @@ export default async function api(path, data) {
                     'Coding',
                     'Loli',
                     'Cats',
-                    'JavaScrpit'
+                    'JavaScrpit',
+                    "Gay Porn",
+                    "AI"
                 ]
             },
             {

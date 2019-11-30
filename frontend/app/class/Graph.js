@@ -139,8 +139,8 @@ export default class Graph {
 
         this.persons = [];
 
-        this.selectedPersons = [null,null]
-        this.inputs = [document.getElementById("person1"), document.getElementById("person2")]
+        this.selectedPersons = [null,null];
+        this.inputs = [document.getElementById("person1"), document.getElementById("person2")];
     }
 
     build(persons) {
@@ -211,7 +211,6 @@ export default class Graph {
     }
 
     draw() {
-        // console.log(this.selectedPersons);
         let p1 = this.ctx.transformedPoint(0, 0);
         let p2 = this.ctx.transformedPoint(this.canvas.width, this.canvas.height);
         this.ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
@@ -232,11 +231,59 @@ export default class Graph {
     }
 
 
-    clearSelection (selectionID){
+    clearSelection(selectionID){
         if (this.selectedPersons[selectionID]) {
             this.selectedPersons[selectionID].selected = false;
         }
         this.selectedPersons[selectionID] = null;
         this.inputs[selectionID].value = "";
     }
+
+    match(){
+        if (this.selectedPersons[0] && this.selectedPersons[1]) { 
+            let matchButton = document.getElementById("match");
+            if (matchButton.innerHTML == "Match") {
+                matchButton.innerHTML = "Back";
+            } else {
+                this.clearSelection(0);
+                this.clearSelection(1);
+
+                
+                matchButton.value = "Match";
+                return;
+            }
+
+            let interests = {
+                0 : [], 
+                1 : [],
+                common : []
+            };
+
+            let interests0 = [...this.selectedPersons[0].person.interests];
+            let interests1 = [...this.selectedPersons[1].person.interests];
+
+            for (let i in this.selectedPersons[0].person.interests){
+                if (interests1.includes(this.selectedPersons[0].person.interests[i])){
+                    interests.common.push(this.selectedPersons[0].person.interests[i]);
+
+                    interests1.splice(interests1.indexOf(this.selectedPersons[0].person.interests[i]), 1);
+                    interests0.splice(i, 1);                    
+                }
+            }
+
+            interests[0] = interests0.slice();
+            interests[1] = interests1.slice();
+            console.log(interests);
+
+            this.selectedPersons[0].match(0, interests, this.ctx);
+            this.selectedPersons[1].match(1, interests, this.ctx);
+
+            for (let person of this.persons){
+                if ((person != this.selectedPersons[0]) && (person != this.selectedPersons[1])) {
+                    person.mode = "invisible";
+                }
+            }
+        }
+    }
+
 }
