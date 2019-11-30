@@ -19,6 +19,7 @@ class Logger {
     }
     format(level, data) {
         let message = data.map(argument => {
+            if (argument instanceof Error) argument = argument.toString();
             if (typeof argument === 'object') argument = JSON.stringify(argument);
             if (typeof argument === 'function') argument = argument.toSource();
             if (typeof argument === 'boolean') argument = argument ? 'true' : 'false';

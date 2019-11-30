@@ -48,9 +48,10 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <a href="#" id="dd_user" class="nav-link dropdown-toggle" data-toggle="dropdown"><i
-                            class="fa fa-user"></i> Mario</a>
+                            class="fa fa-share"></i> Actions</a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd_user">
-                        <a route="/login" style="cursor: pointer;" class="dropdown-item">Logout</a>
+                        <a href="/" style="cursor: pointer;" class="dropdown-item">To Service</a>
+                        <a href="/logout" style="cursor: pointer;" class="dropdown-item">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -187,7 +188,7 @@
                             </tr>
                         </thead>
                         <tbody id="users">
-                           
+
                         </tbody>
                     </table>
                 </div>
@@ -360,7 +361,7 @@
                 tr.appendChild(getTd(user.interests));
                 tr.appendChild(getTd(`<a href="#" class="btn btn-icon btn-pill btn-danger user-delete" data-user-id="${user.user_id}" data-toggle="tooltip"
                 title="Delete"><i class="fa fa-fw fa-trash"></i></a>`));
-                
+
                 document.getElementById("users").appendChild(tr);
             };
 

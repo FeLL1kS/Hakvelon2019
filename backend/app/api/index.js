@@ -8,7 +8,8 @@ const {
 const logger = require('../components/logger')('api');
 
 const api = {
-    user: require('./user')
+    user: require('./user'),
+    word: require('./word'),
 };
 
 for (let model in api) {
