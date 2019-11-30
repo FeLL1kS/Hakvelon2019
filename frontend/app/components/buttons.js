@@ -12,7 +12,7 @@ export default function buttons(graph){
         person2.value = "";
     }
     match.onclick = () => {
-        graph.match();
+        graph.match(match);
     }
 }
 

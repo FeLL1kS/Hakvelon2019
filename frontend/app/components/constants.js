@@ -7,7 +7,7 @@ export const GRAPH_ORBITAL_ADDON = 6;
 /**
  * @constant
  */
-export const GRAPH_ORBITAL_DISTANCE = 430;
+export const GRAPH_ORBITAL_DISTANCE = 440;
 
 /**
  * @constant PERSON_RADIUS радиус шарика человека

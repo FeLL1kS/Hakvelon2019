@@ -239,17 +239,22 @@ export default class Graph {
         this.inputs[selectionID].value = "";
     }
 
-    match(){
+    match(matchButton){
         if (this.selectedPersons[0] && this.selectedPersons[1]) { 
-            let matchButton = document.getElementById("match");
             if (matchButton.innerHTML == "Match") {
                 matchButton.innerHTML = "Back";
             } else {
+                matchButton.innerHTML = "Match";
+                for (let person of this.persons){
+                    person.mode = "circle";
+                }
+
                 this.clearSelection(0);
                 this.clearSelection(1);
-
                 
-                matchButton.value = "Match";
+                this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+                this.ctx.scale(1, 1);
+
                 return;
             }
 

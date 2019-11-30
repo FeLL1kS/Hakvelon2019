@@ -81,6 +81,25 @@ export default class Person {
             if (this.mode == "circle"){
                 let nameFlag = false;
                 //drawing main circle (avatar)
+
+                window.thumbImg = document.createElement('img');
+                thumbImg.src = './ilonmask.jpg';
+                thumbImg.onload = () => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(this.pos.x, this.pos.y, PERSON_RADIUS, 0, Math.PI * 2, true);
+                    ctx.closePath();
+                    ctx.clip();
+
+                    ctx.drawImage(thumbImg, this.pos.x - PERSON_RADIUS, this.pos.y - PERSON_RADIUS, PERSON_RADIUS * 2, PERSON_RADIUS * 2);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, PERSON_RADIUS, 0, Math.PI * 2, true);
+                    ctx.clip();
+                    ctx.closePath();
+                    ctx.restore();
+                };
+
+
                 ctx.beginPath();
                 ctx.arc(this.pos.x, this.pos.y, PERSON_RADIUS, 0, 2 * Math.PI, false);
         
