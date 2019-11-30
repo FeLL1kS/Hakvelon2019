@@ -7,7 +7,7 @@ export const GRAPH_ORBITAL_ADDON = 6;
 /**
  * @constant
  */
-export const GRAPH_ORBITAL_DISTANCE = 440;
+export const GRAPH_ORBITAL_DISTANCE = 460;
 
 /**
  * @constant PERSON_RADIUS радиус шарика человека
@@ -21,11 +21,11 @@ export const PERSON_MAX_NEW_AIM_DISTANCE = 50;
 /**
  * @constant INTEREST_RADIUS радиус шарика интереса
  */
-export const INTEREST_RADIUS = 35;
+export const INTEREST_RADIUS = 30;
 /**
  * @constant INTEREST_DISTANCE расстояние от человека до интереса
  */
-export const INTEREST_DISTANCE = 120;
+export const INTEREST_DISTANCE = 170;
 /**
  * @constant MATCHED_PERSON_POS фиксированные координаты для заматченных людей
  */
