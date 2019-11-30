@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <link rel="stylesheet" href="https://bootadmin.net/css/datatables.min.css">
+    <link rel="stylesheet" href="https://bootadmin.net/css/fullcalendar.min.css">
+    <link rel="stylesheet" href="https://bootadmin.net/css/bootadmin.min.css">
+
+    <title>Admin | SocialGraph</title>
+
+    <script>
+        async function api(path, data = {}) {
+            // TODO: REmove it
+            if (path == 'user/getAll') {
+                return [{"user_id":2,"login":"oleg","name":"Oleg","role":1,"interests":"Gay Porn, Loli"},{"user_id":3,"login":"danila","name":"Danila","role":5,"interests":"Coding, Loli, Cats, JavaScript"},{"user_id":4,"login":"alex","name":"Alex","role":1,"interests":"Coding, Python, Alex"},{"user_id":1,"login":"admin","name":"Administrator","role":5,"interests":""}];
+            }
+
+            let url = [ '', 'api', path].join('/');
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            let result = await response.json();
+
+            if (result.success) {
+                return result.data;
+            } else {
+                // TODO: Error handling
+                alert(result.message);
+                return null;
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand navbar-dark bg-primary" style="">
+        <a class="sidebar-toggle mr-3" href="#"><i class="fa fa-bars"></i></a>
+        <a class="navbar-brand" href="#">SocialGraph | Admin Panel</a>
+
+        <div class="navbar-collapse collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a href="#" id="dd_user" class="nav-link dropdown-toggle" data-toggle="dropdown"><i
+                            class="fa fa-user"></i> Mario</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd_user">
+                        <a route="/login" style="cursor: pointer;" class="dropdown-item">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="d-flex" style="">
+
+        <!-- Sidebar -->
+        <div class="sidebar sidebar-dark bg-dark">
+            <ul class="list-unstyled">
+                <li class="Dashboard"><a route="/" style="cursor: pointer;"><i class="fa fa-fw fa-tachometer-alt"></i>
+                        Dashboard</a></li>
+                <li class="Users"><a route="/users" style="cursor: pointer;"><i class="fa fa-fw fa-users"></i> Users</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /Sidebar -->
+
+        <!-- Root -->
+        <div class="content p-4 Dashboard" style="display:none;">
+
+            <h2 class="mb-4">Dashboard</h2>
+
+            <div class="row mb-4">
+                <div class="col-md">
+                    <div class="d-flex border">
+                        <div class="bg-primary text-light p-4">
+                            <div class="d-flex align-items-center h-100">
+                                <i class="fa fa-3x fa-fw fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 bg-white p-4">
+                            <p class="text-uppercase text-secondary mb-0">Users</p>
+                            <h3 class="font-weight-bold mb-0">123</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="d-flex border">
+                        <div class="bg-success text-light p-4">
+                            <div class="d-flex align-items-center h-100">
+                                <i class="fa fa-3x fa-fw fa-comments"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 bg-white p-4">
+                            <p class="text-uppercase text-secondary mb-0">Visitors</p>
+                            <h3 class="font-weight-bold mb-0">1234</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Root -->
+
+        <!-- Users -->
+        <div class="content p-4 Users" style="">
+
+            <div class="card mb-4">
+                <div class="card-header bg-white font-weight-bold md-4" style="font-size: 2rem;">
+                    <div style="display:flex; justify-content: space-between; align-items: center;">
+                        <p style="margin-bottom: 5px;">All Users</p>
+                        <button type="button" class="btn btn-primary btn-lg btn-pill" data-toggle="modal"
+                            data-target="#addUser"><i class="fas fa-plus-circle"></i>
+                            Add New</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUser"
+                style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addUser">Adding New User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="inputEmail3"
+                                            placeholder="User Name">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Interests</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="inputEmail3"
+                                            placeholder="Interests">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Nickname</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="inputEmail3"
+                                            placeholder="Nickname">
+                                    </div>
+                                </div>
+
+                                <div class="form-check"
+                                    style="display: flex;width: 100px;margin: auto;justify-content: space-around;">
+                                    <div>
+                                        <input class="form-check-input" type="radio" name="radio" id="radio"
+                                            value="option1" checked="">
+                                        <label class="form-check-label" for="radio1">
+                                            M
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input class="form-check-input" type="radio" name="radio" id="radio2"
+                                            value="option2">
+                                        <label class="form-check-label" for="radio2">
+                                            F
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <table id="example" class="table table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Login</th>
+                                <th>Interests</th>
+                                <th class="actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users">
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /Users -->
+
+    </div>
+
+
+    <!-- Login -->
+    <div class="container h-100 Login" style="display: none;">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-md-4">
+                <h1 class="text-center mb-4">Social Graph</h1>
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Username">
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-key"></i></span>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Password">
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <label class="form-check-label">
+                                    <input type="checkbox" name="remember" class="form-check-input">
+                                    Remember Me
+                                </label>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-block btn-primary"><a
+                                            route="/">Login</a></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Login -->
+
+
+
+
+
+
+    <script src="https://bootadmin.net/js/jquery.min.js"></script>
+    <script src="https://bootadmin.net/js/bootstrap.bundle.min.js"></script>
+    <script src="https://bootadmin.net/js/datatables.min.js"></script>
+    <script src="https://bootadmin.net/js/moment.min.js"></script>
+    <script src="https://bootadmin.net/js/fullcalendar.min.js"></script>
+    <script src="https://bootadmin.net/js/bootadmin.min.js"></script>
+
+    <script>
+        window.onload = async function () {
+
+            console.log("DOM loaded");
+
+            let activeRoutes = Array.from(document.querySelectorAll('[route]'));
+
+            function navigate(e) {
+                let route = e.target.attributes[0].value;
+                let routeInfo = FRouter.routes.filter(function (r) {
+                    return r.path === route;
+                })[0];
+
+                if (!routeInfo) {
+                    view.InnerHTML = "error";
+                    window.history.pushState({}, '', '404');
+                } else {
+                    window.history.pushState({}, '', routeInfo.path);
+
+                    let currentPath = window.location.pathname;
+                    console.log(currentPath);
+                    replacer();
+                }
+            }
+
+            activeRoutes.forEach(function (route) {
+                route.addEventListener('click', navigate, false);
+            });
+
+            let Router = function (name, routes) {
+                return {
+                    name: name,
+                    routes: routes
+                };
+            };
+
+            let FRouter = new Router('Router', [{
+                    path: '/',
+                    name: 'Dashboard'
+                },
+                {
+                    path: '/users',
+                    name: 'Users'
+                },
+                {
+                    path: '/login',
+                    name: 'Login'
+                },
+                {
+                    path: '/404',
+                    name: 'Error'
+                }
+            ]);
+
+            function replacer() {
+                let currentPath = window.location.pathname;
+                let route = FRouter.routes.filter(function (r) {
+                    return r.path === currentPath;
+                })[0];
+
+                if (route.name === 'Login') {
+                    document.getElementsByClassName('d-flex')[0].setAttribute('style', 'display: none !important;')
+                    document.getElementsByClassName('navbar')[0].style.display = 'none';
+                    document.getElementsByClassName(route.name)[0].style.display = '';
+                } else {
+                    document.getElementsByClassName('d-flex')[0].style.display = '';
+                    document.getElementsByClassName('navbar')[0].style.display = '';
+                    console.log(route);
+                    document.getElementsByClassName(route.name)[0].classList.add('active');
+                    console.log(document.getElementsByClassName(route.name)[0]);
+                    document.getElementsByClassName(route.name)[1].style.display = '';
+                    console.log(document.getElementsByClassName(route.name)[1]);
+                    route = FRouter.routes.filter(function (r) {
+                        return r.path !== currentPath;
+                    })
+
+                    for (let i = 0; i < route.length; i++) {
+                        document.getElementsByClassName(route[i].name)[0].classList.remove('active');
+                        document.getElementsByClassName(route[i].name)[1].style.display = 'none';
+                    }
+                }
+            }
+
+            let currentPath = window.location.pathname;
+
+            if (currentPath === '/') {
+                console.log('root page');
+                replacer();
+
+            } else {
+                route = FRouter.routes.filter(function (r) {
+                    return r.path === currentPath;
+                })[0];
+                if (route) {
+                    console.log(route.name + ' page');
+                    replacer();
+
+                } else {
+                    console.log('error');
+                }
+            };
+
+            let users = await api("user/getAll");
+
+            function getTd(data){
+                let td = document.createElement("td");
+                td.innerHTML = data;
+                return td;
+            }
+
+            for(user of users){
+                let tr = document.createElement("tr");
+                tr.appendChild(getTd(user.user_id));
+                tr.appendChild(getTd(user.name));
+                tr.appendChild(getTd(user.login));
+                tr.appendChild(getTd(user.interests));
+                tr.appendChild(getTd(`<a href="#" class="btn btn-icon btn-pill btn-primary" data-toggle="tooltip"
+                title="Edit"><i class="fa fa-fw fa-edit"></i></a>    <a href="#" class="btn btn-icon btn-pill btn-danger" data-toggle="tooltip"
+                title="Delete"><i class="fa fa-fw fa-trash"></i></a>`));
+                
+                document.getElementById("users").appendChild(tr);
+            }
+        };
+    </script>
+
+</body>
+
+</html>
