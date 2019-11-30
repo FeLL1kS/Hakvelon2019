@@ -38,5 +38,15 @@ module.exports = {
         if (!interests || typeof interests !== 'string' || interests.trim() == '') throw new ValidationError('interests');
 
         return User.create(name, login, password, role, interests);
+    },
+
+    async delete({
+        user_id
+    }, user) {
+        if (user.role == 1) throw new AccessError('user/delete');
+        if (!user_id || typeof user_id !== 'number') throw new ValidationError('user_id');
+        if (user_id == user.user_id) throw new AccessError('delete yourself');
+
+        return User.delete(user_id);
     }
 };
