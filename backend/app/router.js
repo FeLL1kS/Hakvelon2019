@@ -56,7 +56,7 @@ router.use('/api/', api);
 
 router.use(express.static(__dirname + '/../public'));
 router.use('/uploads', async (req, res) => {
-    res.sendFile(require('path').resolve(__dirname + '/../public/uploads/0.png'));
+    res.sendFile(require('path').resolve(__dirname + '/../public/uploads/0.jpg'));
 });
 
 router.use((req, res, next) => {
