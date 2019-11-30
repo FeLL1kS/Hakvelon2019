@@ -243,6 +243,7 @@
                                     изображения в выделенную область</p>
                                 <p class="onload">Загрузка... <i class="fad fa-refresh fa-spin"></i></p>
                                 <input type="file" id="addFile" multiple accept="image/*">
+                                <input id="hiddenInput" type="hidden" name="user" value="1" />
                             </form>
                         </div>
 
@@ -466,12 +467,14 @@
                 function handleDrop(e) {
                     let dt = e.dataTransfer;
                     let files = dt.files;
+                    console.log(files);
                     handleFiles(files);
                 }
 
                 document.getElementById('addFile').addEventListener('change', handleFiles, false)
 
                 async function handleFiles(files) {
+                    console.log(files);
                     dropArea.classList.add('loading');
                     await Promise.all(
                         ([...files]).map(uploadFile)
@@ -480,9 +483,12 @@
                 }
 
                 async function uploadFile(file) {
-                    let url = '/api/upload/';
+                    let url = '/api/uploads/';
                     let formData = new FormData();
-                    formData.append('file', file);
+
+                    let user_id = document.getElementById('#hiddenInput').value;
+                    formData.append('user_id', user_id);
+                    formData.append('avatar', file);
                     try {
                         let result = await fetch(url, {
                             method: 'POST',
@@ -529,7 +535,12 @@
                     });
                     return false;
                 });
-
+  
+                $('#addImage').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget) // Button that triggered the modal
+                    let user_id = button.data('user-id');
+                    document.getElementById('#hiddenInput').value = user_id;
+                })
             };
         </script>
 
