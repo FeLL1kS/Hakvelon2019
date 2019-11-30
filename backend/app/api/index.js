@@ -68,7 +68,7 @@ router.post('/upload', multer({ dest: UPLOADS_PATH }).single("avatar"), (req, re
         success: true,
         data: '/uploads/' + user_id + '.jpg'
     });
-})
+});
 
 
 router.use((req, res) => {

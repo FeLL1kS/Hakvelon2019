@@ -51,8 +51,14 @@ router.use('/admin', (req, res, next) => {
         res.sendFile(require('path').resolve(__dirname + '/../public/admin.html'));
     }
 });
-router.use(express.static(__dirname + '/../public'));
+
 router.use('/api/', api);
+
+router.use(express.static(__dirname + '/../public'));
+router.use('/uploads', async (req, res) => {
+    res.sendFile(require('path').resolve(__dirname + '/../public/uploads/0.png'));
+});
+
 router.use((req, res, next) => {
     res.redirect(301, '/#' + req.originalUrl);
 });
