@@ -11,9 +11,8 @@ import {
  * @class Person
  */
 export default class Person {
-    constructor(person, x, y) {
+    constructor(person, x, y, canvas) {
         this.person = person;
-        this.person.interests = this.person.interests.split(',').map(_ => _.trim()).filter(_ => _);
         this.pos = {
             x: x,
             y: y
@@ -61,12 +60,6 @@ export default class Person {
         }
 
         this.onclick = () => true;
-
-        let avatar = new Image();
-        avatar.src = '/uploads/' + this.person.user_id + '.jpg';
-        avatar.onload = () => {
-            this.avatar = avatar;
-        };
     }
 
     generateNewAim() {
@@ -89,35 +82,50 @@ export default class Person {
                 let nameFlag = false;
                 //drawing main circle (avatar)
 
-                if (this.avatar)
-                    ctx.drawImage(this.avatar, this.pos.x - PERSON_RADIUS, this.pos.y - PERSON_RADIUS, PERSON_RADIUS * 2, PERSON_RADIUS * 2);
+                window.thumbImg = document.createElement('img');
+                thumbImg.src = './ilonmask.jpg';
+                thumbImg.onload = () => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(this.pos.x, this.pos.y, PERSON_RADIUS, 0, Math.PI * 2, true);
+                    ctx.closePath();
+                    ctx.clip();
+
+                    ctx.drawImage(thumbImg, this.pos.x - PERSON_RADIUS, this.pos.y - PERSON_RADIUS, PERSON_RADIUS * 2, PERSON_RADIUS * 2);gi
+                    ctx.beginPath();
+                    ctx.arc(0, 0, PERSON_RADIUS, 0, Math.PI * 2, true);
+                    ctx.clip();
+                    ctx.closePath();
+                    ctx.restore();
+                };
+
 
                 ctx.beginPath();
                 ctx.arc(this.pos.x, this.pos.y, PERSON_RADIUS, 0, 2 * Math.PI, false);
-
+        
                 if (ctx.isPointInPath(mouse.x, mouse.y)) {
                     nameFlag = true;
-
+                    
                     if (this.mouseDown != mouse.down){
                         this.mouseDown = mouse.down
-                        if (mouse.down) {
+                        if (mouse.down) {  
                             if (this.onclick()) {
                                 this.selected = !this.selected;
                             }
-                        }
-                    }
-                }
-
+                        } 
+                    }            
+                }        
+        
                 ctx.lineWidth = 5;
-
+        
                 if (this.selected){
                     ctx.strokeStyle = "#e36d42";
                 } else {
                     ctx.strokeStyle = '#003300';
                 }
-
+                
                 ctx.stroke();
-
+        
                 if (nameFlag) {
                     // drawing name
                     ctx.beginPath();
@@ -125,8 +133,8 @@ export default class Person {
                     ctx.fillText(this.person.name, this.pos.x - this.person.name.length * 0.5 * 5, this.pos.y);
                     ctx.fill();
                 }
-
-
+        
+        
                 for (let i in this.person.interests) {
                     let interestX = this.pos.x + INTEREST_DISTANCE * Math.cos(this.interestPos[i].a);
                     let interestY = this.pos.y + INTEREST_DISTANCE * Math.sin(this.interestPos[i].a);
@@ -136,17 +144,17 @@ export default class Person {
                     ctx.lineWidth = 5;
                     ctx.strokeStyle = '#003300';
                     ctx.stroke();
-
+        
                     // drawing tentacle
                     ctx.beginPath();
                     ctx.fillStyle = "black";
                     ctx.moveTo(this.pos.x + PERSON_RADIUS * Math.cos(this.interestPos[i].a),
                         this.pos.y + PERSON_RADIUS * Math.sin(this.interestPos[i].a));
-
+        
                     ctx.lineTo(interestX + INTEREST_RADIUS * Math.cos(this.interestPos[i].a + Math.PI),
                         interestY + INTEREST_RADIUS * Math.sin(this.interestPos[i].a + Math.PI));
                     ctx.stroke();
-
+        
                     // drawing text
                     ctx.beginPath();
                     ctx.fillStyle = "black";
@@ -168,29 +176,29 @@ export default class Person {
                 ctx.fillStyle = "white";
                 ctx.beginPath();
                 ctx.arc(this.matchedPos.x, this.matchedPos.y, PERSON_RADIUS, 0, 2 * Math.PI, false);
-
+        
                 if (ctx.isPointInPath(mouse.x, mouse.y)) {
                     nameFlag = true;
-
+                    
                     if (this.mouseDown != mouse.down){
                         this.mouseDown = mouse.down
-                        if (mouse.down) {
+                        if (mouse.down) {  
                             if (this.onclick()) {
                                 this.selected = !this.selected;
                             }
-                        }
-                    }
-                }
-
+                        } 
+                    }            
+                }        
+        
                 ctx.lineWidth = 5;
-
+        
                 if (this.selected){
                     ctx.strokeStyle = "#e36d42";
                 }
-
+                
                 ctx.fill();
                 ctx.stroke();
-
+        
                 if (nameFlag) {
                     // drawing name
                     ctx.beginPath();
@@ -213,12 +221,12 @@ export default class Person {
                     // drawing text
                     ctx.beginPath();
                     ctx.fillStyle = "black";
-                    ctx.fillText(this.matchedInterests[i].label,
-                                 this.matchedInterests[i].pos.x - this.matchedInterests[i].label.length * 0.5 * 5,
+                    ctx.fillText(this.matchedInterests[i].label, 
+                                 this.matchedInterests[i].pos.x - this.matchedInterests[i].label.length * 0.5 * 5, 
                                  this.matchedInterests[i].pos.y);
                     ctx.fill();
                 }
-            }
+            }            
         }
     }
 
@@ -282,7 +290,7 @@ export default class Person {
                 },
                 label : interests[this.matchedID][i]
             };
-
+            
             this.matchedInterests.push(interest)
         }
     }
