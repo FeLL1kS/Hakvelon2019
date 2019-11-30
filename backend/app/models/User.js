@@ -16,7 +16,7 @@ module.exports = {
     },
 
     getAll: async () => {
-        let result = (await db.query(`select * from users where user_id > 0`)).rows;
+        let result = (await db.query(`select * from users where user_id > 0 order by user_id desc`)).rows;
         result = result.map(user => {
             delete user.password;
             return user;
@@ -25,15 +25,15 @@ module.exports = {
     },
 
     getList: async () => {
-        let result = (await db.query(`select user_id, name, interests from users where user_id > 0`)).rows;
+        let result = (await db.query(`select user_id, name, interests from users where user_id > 0 order by user_id desc`)).rows;
         return result;
     },
 
     getById: async (user_id) => {
-        let result = (await db.query(`select * from users where user_id = $1 limit 1`, [ user_id ])).rows[0];
-        if (result) {
+        let user = (await db.query(`select * from users where user_id = $1 limit 1`, [user_id])).rows[0];
+        if (user) {
             delete user.password;
-            return result;
+            return user;
         } else return null;
     },
 
@@ -51,5 +51,9 @@ module.exports = {
             ) returning user_id
         `, [ name, login, password, role, interests ]);
         if (res.rows && res.rows[0] && (res = res.rows[0])) return res.user_id;
+    },
+
+    delete: async (user_id) => {
+        await db.query(`delete from users where user_id = $1 and user_id > 0`, [user_id]);
     }
 };
