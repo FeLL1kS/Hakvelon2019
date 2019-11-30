@@ -45,17 +45,24 @@ export default class Person {
         this.startAngle = 2 * Math.PI * Math.random();
         let stepAngle = 2 * Math.PI / this.person.interests.length;
 
+        this.rng = {};
         for (let i in this.person.interests) {
             let angle = i * stepAngle + this.startAngle + (Math.random() - 0.5) * Math.PI / 9;
 
+            this.rng[i] = {
+                x: (1 - Math.random() * 0.4),
+                y: (1 - Math.random() * 0.4)
+            };
+            let rng = this.rng[i];
+
             this.interestPos.push({
-                x: this.pos.x + INTEREST_DISTANCE * Math.cos(angle),
-                y: this.pos.y + INTEREST_DISTANCE * Math.sin(angle),
+                x: this.pos.x + rng.x * INTEREST_DISTANCE * Math.cos(angle),
+                y: this.pos.y + rng.y * INTEREST_DISTANCE * Math.sin(angle),
                 a: angle
             });
             this.interestConstPos.push({
-                x: this.pos.x + INTEREST_DISTANCE * Math.cos(angle),
-                y: this.pos.y + INTEREST_DISTANCE * Math.sin(angle),
+                x: this.pos.x + rng.x * INTEREST_DISTANCE * Math.cos(angle),
+                y: this.pos.y + rng.y * INTEREST_DISTANCE * Math.sin(angle),
                 a: angle
             });
         }
@@ -89,8 +96,21 @@ export default class Person {
                 let nameFlag = false;
                 //drawing main circle (avatar)
 
-                if (this.avatar)
+                if (this.avatar) {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(this.pos.x, this.pos.y, PERSON_RADIUS, 0, 2 * Math.PI, false);
+                    ctx.closePath();
+                    ctx.clip();
+
                     ctx.drawImage(this.avatar, this.pos.x - PERSON_RADIUS, this.pos.y - PERSON_RADIUS, PERSON_RADIUS * 2, PERSON_RADIUS * 2);
+
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 2, 0, Math.PI * 2, true);
+                    ctx.clip();
+                    ctx.closePath();
+                    ctx.restore();
+                }
 
                 ctx.beginPath();
                 ctx.arc(this.pos.x, this.pos.y, PERSON_RADIUS, 0, 2 * Math.PI, false);
@@ -108,10 +128,11 @@ export default class Person {
                     }
                 }
 
-                ctx.lineWidth = 5;
+                ctx.lineWidth = 3;
 
                 if (this.selected){
-                    ctx.strokeStyle = "#e36d42";
+                    ctx.strokeStyle = "#f22";
+                    ctx.lineWidth = 6;
                 } else {
                     ctx.strokeStyle = '#003300';
                 }
@@ -128,12 +149,13 @@ export default class Person {
 
 
                 for (let i in this.person.interests) {
-                    let interestX = this.pos.x + INTEREST_DISTANCE * Math.cos(this.interestPos[i].a);
-                    let interestY = this.pos.y + INTEREST_DISTANCE * Math.sin(this.interestPos[i].a);
+                    let rng = this.rng[i];
+                    let interestX = this.pos.x + rng.x * INTEREST_DISTANCE * Math.cos(this.interestPos[i].a);
+                    let interestY = this.pos.y + rng.y * INTEREST_DISTANCE * Math.sin(this.interestPos[i].a);
                     // drawing circle for interest
                     ctx.beginPath();
                     ctx.arc(interestX, interestY, INTEREST_RADIUS, 0, 2 * Math.PI, false);
-                    ctx.lineWidth = 5;
+                    ctx.lineWidth = 3;
                     ctx.strokeStyle = '#003300';
                     ctx.stroke();
 
@@ -154,10 +176,10 @@ export default class Person {
                     ctx.fill();
                 }
             } else if (this.mode == "match"){
-
+                // TODO: Sanya fix it plz
                 for (let i in this.matchedInterests) {
                     // drawing tentacle
-                    ctx.fillStyle = "black";
+                    ctx.strokeStyle = "black";
                     ctx.moveTo(this.matchedPos.x, this.matchedPos.y);
                     ctx.lineTo(this.matchedInterests[i].pos.x,
                                this.matchedInterests[i].pos.y);
@@ -165,7 +187,23 @@ export default class Person {
                 }
 
                 let nameFlag = false;
-                ctx.fillStyle = "white";
+
+                if (this.avatar) {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(this.matchedPos.x, this.matchedPos.y, PERSON_RADIUS, 0, 2 * Math.PI, false);
+                    ctx.closePath();
+                    ctx.clip();
+
+                    ctx.drawImage(this.avatar, this.matchedPos.x - PERSON_RADIUS, this.matchedPos.y - PERSON_RADIUS, PERSON_RADIUS * 2, PERSON_RADIUS * 2);
+
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 2, 0, Math.PI * 2, true);
+                    ctx.clip();
+                    ctx.closePath();
+                    ctx.restore();
+                }
+
                 ctx.beginPath();
                 ctx.arc(this.matchedPos.x, this.matchedPos.y, PERSON_RADIUS, 0, 2 * Math.PI, false);
 
@@ -173,7 +211,7 @@ export default class Person {
                     nameFlag = true;
 
                     if (this.mouseDown != mouse.down){
-                        this.mouseDown = mouse.down
+                        this.mouseDown = mouse.down;
                         if (mouse.down) {
                             if (this.onclick()) {
                                 this.selected = !this.selected;
@@ -182,13 +220,13 @@ export default class Person {
                     }
                 }
 
-                ctx.lineWidth = 5;
+                ctx.lineWidth = 3;
 
                 if (this.selected){
-                    ctx.strokeStyle = "#e36d42";
+                    ctx.strokeStyle = "#f22";
+                    ctx.lineWidth = 6;
                 }
 
-                ctx.fill();
                 ctx.stroke();
 
                 if (nameFlag) {
@@ -205,7 +243,7 @@ export default class Person {
                     ctx.beginPath();
                     ctx.fillStyle = "white";
                     ctx.arc(this.matchedInterests[i].pos.x, this.matchedInterests[i].pos.y, INTEREST_RADIUS, 0, 2 * Math.PI, false);
-                    ctx.lineWidth = 5;
+                    ctx.lineWidth = 3;
                     ctx.strokeStyle = '#003300';
                     ctx.fill();
                     ctx.stroke();
@@ -270,10 +308,10 @@ export default class Person {
 
 
         let startAngle = Math.PI / 2;
-        let stepAngle = Math.PI / (interests[this.matchedID].length - 1);
+        let stepAngle = (Math.PI - 2 * Math.PI / 10) / (interests[this.matchedID].length - 1);
 
         for (let i in interests[this.matchedID]){
-            let angle = i * stepAngle + startAngle //+ (Math.random() - 0.5) * Math.PI / 9;
+            let angle = i * stepAngle + startAngle + Math.PI / 10 + (Math.random() - 0.5) * Math.PI / 9;
             let interest = {
                 pos : {
                     x : (this.matchedID == 0) ? this.matchedPos.x + 2 * INTEREST_DISTANCE * Math.cos(angle) : this.matchedPos.x - 2 * INTEREST_DISTANCE * Math.cos(angle),

@@ -141,6 +141,8 @@ export default class Graph {
 
         this.selectedPersons = [null,null];
         this.inputs = [document.getElementById("person1"), document.getElementById("person2")];
+        this.inputs[0].value = '';
+        this.inputs[1].value = '';
     }
 
     build(persons) {
@@ -240,7 +242,7 @@ export default class Graph {
     }
 
     match(matchButton){
-        if (this.selectedPersons[0] && this.selectedPersons[1]) { 
+        if (this.selectedPersons[0] && this.selectedPersons[1]) {
             if (matchButton.innerHTML == "Match") {
                 matchButton.innerHTML = "Back";
             } else {
@@ -251,7 +253,7 @@ export default class Graph {
 
                 this.clearSelection(0);
                 this.clearSelection(1);
-                
+
                 this.ctx.setTransform(1, 0, 0, 1, 0, 0);
                 this.ctx.scale(1, 1);
 
@@ -259,7 +261,7 @@ export default class Graph {
             }
 
             let interests = {
-                0 : [], 
+                0 : [],
                 1 : [],
                 common : []
             };
@@ -272,7 +274,7 @@ export default class Graph {
                     interests.common.push(this.selectedPersons[0].person.interests[i]);
 
                     interests1.splice(interests1.indexOf(this.selectedPersons[0].person.interests[i]), 1);
-                    interests0.splice(i, 1);                    
+                    interests0.splice(i, 1);
                 }
             }
 

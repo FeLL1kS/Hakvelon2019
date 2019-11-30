@@ -12,10 +12,10 @@ const names = ((_) => {
     return a;
 })(["Terina Wheeless", "Dominque Matamoros", "Avery Farney", "Ignacia Hames", "Luisa Goggin", "Maisha Yonts", "Tasha Wolfgram", "Senaida Eisenberg", "Billi Merino", "Sharie Mehring", "Doria Buschman", "Neal Cathey", "Krysta Cargle", "Virgil Hatten", "Nelia Colquitt", "Elinor Dansby", "Ernestina Silver", "Jaimee Lyvers", "Norris Towler", "Golda Overturf", "Mario Ulrey", "Raquel Rocco", "Paulita Gathings", "Burt Chavarria", "Caron Bradway", "Ka Gotto", "Denae Prigge", "Belkis Presley", "Laronda Maclennan", "Julius Drapeau", "Irving Howie", "Caroyln Pinheiro", "Alethea Asmussen", "Imelda Benny", "Shameka Soderstrom", "Danyelle Scroggs", "Melaine Cespedes", "Dorene Lanphere", "Rona Hui", "Madeline Harten", "Charissa Stanford", "Latonia Fling", "Mercy Klaus", "Phyliss Renfrew", "Cara Northington", "Edythe Redding", "Elizebeth Hornstein", "Hui Litke", "Cristin Marietta", "Jestine Landeros"]);
 
-const minWords = 6;
-const maxWords = 20;
+const minWords = 3;
+const maxWords = 7;
 
-const users = 10;
+const users = 30;
 
 
 const User = require('../backend/app/models/User');

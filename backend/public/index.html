@@ -12,12 +12,36 @@
         }
 
         #toolbar {
-            margin-top: -100px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
             text-align: center;
+            padding-bottom: 20px;
+        }
+
+        input, button {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: none;
+            margin: 6px 10px;
+            min-width: 40px;
+            background: #fff;
+            box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+        }
+        button:hover {
+            box-shadow: 0px 0px 30px 1px rgba(0,0,0,0.75);
         }
 
         #match-block {
             margin-top: 5px;
+        }
+        #match {
+            min-width: 14rem;
+        }
+        #toolbar.active #inputs button {
+            display: none;
         }
     </style>
 </head>
@@ -25,12 +49,12 @@
 <body>
     <canvas id="canvas"></canvas>
 
-    <div id="toolbar">
+    <center id="toolbar">
         <div id="tools">
             <div id="inputs">
-                <input id="person1" type="text">
                 <button id="clearPerson1">X</button>
-                <input id="person2" type="text">
+                <input id="person1" type="text" disabled>
+                <input id="person2" type="text" disabled>
                 <button id="clearPerson2">X</button>
             </div>
             <div id="match-block">
@@ -39,7 +63,7 @@
 
         </div>
 
-    </div>
+    </center>
 
     <script type="text/javascript" src="app.js"></script>
 </body>
