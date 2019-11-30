@@ -6,18 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
     <link rel="stylesheet" href="https://bootadmin.net/css/datatables.min.css">
     <link rel="stylesheet" href="https://bootadmin.net/css/fullcalendar.min.css">
     <link rel="stylesheet" href="https://bootadmin.net/css/bootadmin.min.css">
+
+    <style>
+        #drop-area {
+            width: 100%;
+            height: 200px;
+            border: 3px dashed #aaa;
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        #drop-area.highlight {
+            border-color: purple;
+        }
+
+        #drop-area .onload,
+        #drop-area.loading .noload {
+            display: none;
+        }
+
+        #drop-area.loading .onload {
+            display: block;
+        }
+
+        #addFile {
+            position: fixed;
+            top: -100px;
+        }
+    </style>
 
     <title>Admin | SocialGraph</title>
 
     <script>
         async function api(path, data = {}) {
 
-            let url = [ '', 'api', path].join('/');
+            let url = ['', 'api', path].join('/');
             let response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -127,74 +156,91 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addUser">Adding New User</h5>
+                            <h5 class="modal-title">Adding New User</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form id="myForm" onsubmit="return false;">
                                 <div class="form-group row">
                                     <label for="inputNickname" class="col-sm-2 col-form-label">Nickname</label>
                                     <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputNickname"
-                                            placeholder="User Nickname">
+                                        <!-- <input type="text" class="form-control" id="inputNickname"
+                                            placeholder="User Nickname"> -->
+                                        <input class="form-control" type="text" name="nickname" value="1"
+                                            id="nickname" />
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputName"
-                                            placeholder="Name">
+                                        <!-- <input type="text" class="form-control" id="inputName" placeholder="Name">                                        -->
+                                        <input class="form-control" type="text" name="name" value="1" id="name" />
+
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="inputInterests" class="col-sm-2 col-form-label">Interests</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputInterests"
-                                            placeholder="Interests">
+                                        <!-- <input type="text" class="form-control" id="inputInterests"
+                                            placeholder="Interests"> -->
+                                        <input class="form-control" type="text" name="interests" value="1"
+                                            id="intereinsts" />
+
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="inputPassword"
-                                            placeholder="Password">
+                                        <!-- <input type="password" class="form-control" id="inputPassword"
+                                            placeholder="Password"> -->
+                                        <input class="form-control" type="password" name="password" value="1"
+                                            id="password" />
                                     </div>
-                                </div>
                             </form>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="addUser">Add User</button>
-                        </div>
                     </div>
-                </div>
-            </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closing">Close</button>
+                        <button type="submit" class="btn btn-primary" id="addingUser">Add User</button>
+                    </div>
+                    <div id="drop-area">
+                        <form>
+                            <p class="noload">Нажмите на это поле для выбора файлов или перетащите нужные
+                                изображения в выделенную область</p>
+                            <p class="onload">Загрузка... <i class="fad fa-refresh fa-spin"></i></p>
+                            <input type="file" id="addFile" multiple accept="image/*">
+                        </form>
+                    </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <table id="example" class="table table-hover" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Login</th>
-                                <th>Interests</th>
-                                <th class="actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="users">
-
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
-        <!-- /Users -->
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <table id="example" class="table table-hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="sorting">ID</th>
+                            <th class="sorting">Name</th>
+                            <th class="sorting">Login</th>
+                            <th class="sorting">Interests</th>
+                            <th class="sorting" class="actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /Users -->
 
     </div>
 
@@ -223,7 +269,7 @@
 
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-block btn-primary" id="addUser"><a
+                                    <button type="submit" class="btn btn-block btn-primary" id=""><a
                                             route="/">Login</a></button>
                                 </div>
                             </div>
@@ -307,7 +353,8 @@
                 })[0];
 
                 if (route.name === 'Login') {
-                    document.getElementsByClassName('d-flex')[0].setAttribute('style', 'display: none !important;')
+                    document.getElementsByClassName('d-flex')[0].setAttribute('style',
+                        'display: none !important;')
                     document.getElementsByClassName('navbar')[0].style.display = 'none';
                     document.getElementsByClassName(route.name)[0].style.display = '';
                 } else {
@@ -347,33 +394,136 @@
 
             let users = await api("user/getAll");
 
-            function getTd(data){
+            function getTd(data) {
                 let td = document.createElement("td");
                 td.innerHTML = data;
                 return td;
             }
 
-            for(user of users){
+            for (user of users) {
                 let tr = document.createElement("tr");
                 tr.appendChild(getTd(user.user_id));
                 tr.appendChild(getTd(user.name));
                 tr.appendChild(getTd(user.login));
                 tr.appendChild(getTd(user.interests));
-                tr.appendChild(getTd(`<a href="#" class="btn btn-icon btn-pill btn-danger user-delete" data-user-id="${user.user_id}" data-toggle="tooltip"
+                tr.appendChild(getTd(`<a href="#" class="btn btn-icon btn-pill btn-success" data-user-id="${user.user_id}" data-toggle="tooltip"
+                title="Add Image"><i class="far fa-image"></i></a> <a href="#" class="btn btn-icon btn-pill btn-danger user-delete" data-user-id="${user.user_id}" data-toggle="tooltip"
                 title="Delete"><i class="fa fa-fw fa-trash"></i></a>`));
 
                 document.getElementById("users").appendChild(tr);
             };
 
-            
-            $('.user-delete').click(function(ev){
+
+            $('.user-delete').click(function (ev) {
                 ev.preventDefault();
-                api('user/delete/', { user_id: $(this).data('user-id') }).then(_ => {
+                api('user/delete/', {
+                    user_id: $(this).data('user-id')
+                }).then(_ => {
                     $(this).parent('td').parent('tr').remove();
                 });
                 return false;
             });
-            
+
+            let dropArea = document.getElementById('drop-area');
+
+            ;
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            })
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ;
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            })
+
+            function highlight(e) {
+                dropArea.classList.add('highlight');
+            }
+
+            function unhighlight(e) {
+                dropArea.classList.remove('highlight');
+            }
+
+            dropArea.addEventListener('drop', handleDrop, false)
+
+            function handleDrop(e) {
+                let dt = e.dataTransfer;
+                let files = dt.files;
+                handleFiles(files);
+            }
+
+            document.getElementById('addFile').addEventListener('change', handleFiles, false)
+
+            async function handleFiles(files) {
+                dropArea.classList.add('loading');
+                await Promise.all(
+                    ([...files]).map(uploadFile)
+                );
+                dropArea.classList.remove('loading');
+            }
+
+            async function uploadFile(file) {
+                let url = '/api/upload/';
+                let formData = new FormData();
+                formData.append('file', file);
+                try {
+                    let result = await fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    $('.noload').text("Загружено");
+                    $('#closing').click(function () {
+                        $('.noload').text(
+                            "Нажмите на это поле для выбора файлов или перетащите нужные изображения в выделенную область"
+                        );
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            let $data;
+
+            $('#addingUser').click(function (e) {
+                e.preventDefault();
+
+                let data;
+                data = $('#myForm').serializeArray();
+                console.log(data);
+            })
+
+            $('#addingUser').click(function (ev) {
+                ev.preventDefault();
+
+                let data = $('#myForm').serializeArray();
+                api('user/create/', {
+                    name: data[1].value,
+                    login: data[0].value,
+                    password: data[3].value,
+                    role: 1,
+                    interests: data[2].value
+                }).then(_ => {
+                    let tr = document.createElement("tr");
+                    tr.appendChild(getTd(_));
+                    tr.appendChild(getTd(data[1].value));
+                    tr.appendChild(getTd(data[0].value));
+                    tr.appendChild(getTd(data[2].value));
+                    tr.appendChild(getTd    (`<a href="#" class="btn btn-icon btn-pill btn-success" data-user-id="${_}" data-toggle="tooltip"title="Add Image"><i class="far fa-image"></i></a>  <a href="#" class="btn btn-icon btn-pill btn-danger user-delete" data-user-id="${_}" data-toggle="tooltip"
+                    title="Delete"><i class="fa fa-fw fa-trash"></i></a>`));
+
+                    document.getElementById("users").appendChild(tr);
+                });
+                return false;
+            });
+
         };
     </script>
 
