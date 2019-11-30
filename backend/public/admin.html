@@ -16,10 +16,6 @@
 
     <script>
         async function api(path, data = {}) {
-            // TODO: REmove it
-            if (path == 'user/getAll') {
-                return [{"user_id":2,"login":"oleg","name":"Oleg","role":1,"interests":"Gay Porn, Loli"},{"user_id":3,"login":"danila","name":"Danila","role":5,"interests":"Coding, Loli, Cats, JavaScript"},{"user_id":4,"login":"alex","name":"Alex","role":1,"interests":"Coding, Python, Alex"},{"user_id":1,"login":"admin","name":"Administrator","role":5,"interests":""}];
-            }
 
             let url = [ '', 'api', path].join('/');
             let response = await fetch(url, {
@@ -139,51 +135,41 @@
                         <div class="modal-body">
                             <form>
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+                                    <label for="inputNickname" class="col-sm-2 col-form-label">Nickname</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail3"
-                                            placeholder="User Name">
+                                            <input type="text" class="form-control" id="inputNickname"
+                                            placeholder="User Nickname">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Interests</label>
+                                    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail3"
+                                        <input type="text" class="form-control" id="inputName"
+                                            placeholder="Name">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="inputInterests" class="col-sm-2 col-form-label">Interests</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="inputInterests"
                                             placeholder="Interests">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Nickname</label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail3"
-                                            placeholder="Nickname">
-                                    </div>
-                                </div>
-
-                                <div class="form-check"
-                                    style="display: flex;width: 100px;margin: auto;justify-content: space-around;">
-                                    <div>
-                                        <input class="form-check-input" type="radio" name="radio" id="radio"
-                                            value="option1" checked="">
-                                        <label class="form-check-label" for="radio1">
-                                            M
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <input class="form-check-input" type="radio" name="radio" id="radio2"
-                                            value="option2">
-                                        <label class="form-check-label" for="radio2">
-                                            F
-                                        </label>
+                                        <input type="password" class="form-control" id="inputPassword"
+                                            placeholder="Password">
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="submit" class="btn btn-primary" id="addUser">Add User</button>
                         </div>
                     </div>
                 </div>
@@ -220,7 +206,7 @@
                 <h1 class="text-center mb-4">Social Graph</h1>
                 <div class="card">
                     <div class="card-body">
-                        <form>
+                        <form method="POST">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
@@ -235,16 +221,9 @@
                                 <input type="password" class="form-control" placeholder="Password">
                             </div>
 
-                            <div class="form-check mb-3">
-                                <label class="form-check-label">
-                                    <input type="checkbox" name="remember" class="form-check-input">
-                                    Remember Me
-                                </label>
-                            </div>
-
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-block btn-primary"><a
+                                    <button type="submit" class="btn btn-block btn-primary" id="addUser"><a
                                             route="/">Login</a></button>
                                 </div>
                             </div>
@@ -288,7 +267,6 @@
                     window.history.pushState({}, '', routeInfo.path);
 
                     let currentPath = window.location.pathname;
-                    console.log(currentPath);
                     replacer();
                 }
             }
@@ -335,11 +313,8 @@
                 } else {
                     document.getElementsByClassName('d-flex')[0].style.display = '';
                     document.getElementsByClassName('navbar')[0].style.display = '';
-                    console.log(route);
                     document.getElementsByClassName(route.name)[0].classList.add('active');
-                    console.log(document.getElementsByClassName(route.name)[0]);
                     document.getElementsByClassName(route.name)[1].style.display = '';
-                    console.log(document.getElementsByClassName(route.name)[1]);
                     route = FRouter.routes.filter(function (r) {
                         return r.path !== currentPath;
                     })
@@ -384,12 +359,21 @@
                 tr.appendChild(getTd(user.name));
                 tr.appendChild(getTd(user.login));
                 tr.appendChild(getTd(user.interests));
-                tr.appendChild(getTd(`<a href="#" class="btn btn-icon btn-pill btn-primary" data-toggle="tooltip"
-                title="Edit"><i class="fa fa-fw fa-edit"></i></a>    <a href="#" class="btn btn-icon btn-pill btn-danger" data-toggle="tooltip"
+                tr.appendChild(getTd(`<a href="#" class="btn btn-icon btn-pill btn-danger user-delete" data-user-id="${user.user_id}" data-toggle="tooltip"
                 title="Delete"><i class="fa fa-fw fa-trash"></i></a>`));
 
                 document.getElementById("users").appendChild(tr);
-            }
+            };
+
+            
+            $('.user-delete').click(function(ev){
+                ev.preventDefault();
+                api('user/delete/', { user_id: $(this).data('user-id') }).then(_ => {
+                    $(this).parent('td').parent('tr').remove();
+                });
+                return false;
+            });
+            
         };
     </script>
 
