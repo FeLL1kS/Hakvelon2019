@@ -8,7 +8,7 @@ const names = ((_) => {
         s = e.split(' ');
         a.f.push(s[0]);
         a.s.push(s[1]);
-    })
+    });
     return a;
 })(["Terina Wheeless", "Dominque Matamoros", "Avery Farney", "Ignacia Hames", "Luisa Goggin", "Maisha Yonts", "Tasha Wolfgram", "Senaida Eisenberg", "Billi Merino", "Sharie Mehring", "Doria Buschman", "Neal Cathey", "Krysta Cargle", "Virgil Hatten", "Nelia Colquitt", "Elinor Dansby", "Ernestina Silver", "Jaimee Lyvers", "Norris Towler", "Golda Overturf", "Mario Ulrey", "Raquel Rocco", "Paulita Gathings", "Burt Chavarria", "Caron Bradway", "Ka Gotto", "Denae Prigge", "Belkis Presley", "Laronda Maclennan", "Julius Drapeau", "Irving Howie", "Caroyln Pinheiro", "Alethea Asmussen", "Imelda Benny", "Shameka Soderstrom", "Danyelle Scroggs", "Melaine Cespedes", "Dorene Lanphere", "Rona Hui", "Madeline Harten", "Charissa Stanford", "Latonia Fling", "Mercy Klaus", "Phyliss Renfrew", "Cara Northington", "Edythe Redding", "Elizebeth Hornstein", "Hui Litke", "Cristin Marietta", "Jestine Landeros"]);
 
@@ -32,7 +32,7 @@ const login = (name) => name.toLowerCase().replace(' ', '');
         user.login = login(user.name) + rint(1, 200);
         user.password = user.login;
         user.role = 1;
-        user.interests = words.sort(() => Math.random() - 0.5).slice(0, rint(minWords, maxWords)).join(',')
+        user.interests = words.sort(() => Math.random() - 0.5).slice(0, rint(minWords, maxWords)).join(',');
 
         console.log(await User.create(...Object.values(user)));
     }

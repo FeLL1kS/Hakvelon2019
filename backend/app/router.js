@@ -36,7 +36,7 @@ router.get('/logout', (req, res, next) => {
     res.redirect('/auth');
 });
 router.use((req, res, next) => {
-    if (!req.session.user || !req.session.token || !req.cookies.tkn || !(req.session.token == req.cookies.tkn)) {
+    if (!req.session.user || !req.session.token || !req.cookies.tkn || (req.session.token !== req.cookies.tkn)) {
         res.status(403).redirect('/auth?' + req.originalUrl);
     } else {
         next();
