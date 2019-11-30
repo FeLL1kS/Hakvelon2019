@@ -48,7 +48,7 @@ router.use('/admin', (req, res, next) => {
     if (req.session.user.role == 1) {
         next();
     } else {
-        res.sendFile(__dirname + '/../public/admin.html');
+        res.sendFile(require('path').resolve(__dirname + '/../public/admin.html'));
     }
 });
 router.use(express.static(__dirname + '/../public'));
