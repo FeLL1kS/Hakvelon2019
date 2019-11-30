@@ -16,7 +16,7 @@ module.exports = {
     },
 
     getAll: async () => {
-        let result = (await db.query(`select * from users where user_id > 0`)).rows;
+        let result = (await db.query(`select * from users where user_id > 0 order by user_id desc`)).rows;
         result = result.map(user => {
             delete user.password;
             return user;
@@ -25,7 +25,7 @@ module.exports = {
     },
 
     getList: async () => {
-        let result = (await db.query(`select user_id, name, interests from users where user_id > 0`)).rows;
+        let result = (await db.query(`select user_id, name, interests from users where user_id > 0 order by user_id desc`)).rows;
         return result;
     },
 

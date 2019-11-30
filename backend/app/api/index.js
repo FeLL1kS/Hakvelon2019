@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 
 const {
@@ -6,6 +7,8 @@ const {
     AccessError
 } = require('../class/Error');
 const logger = require('../components/logger')('api');
+
+const UPLOADS_PATH = require('path').resolve(__dirname + '/../../public/uploads');
 
 const api = {
     user: require('./user'),
@@ -50,6 +53,23 @@ for (let model in api) {
         });
     }
 }
+
+router.post('/upload', multer({ dest: UPLOADS_PATH }).single("avatar"), (req, res) => {
+    let user_id = req.body.user_id;
+    if (!user_id || parseInt(user_id) !== user_id) return res.json({
+        success: false,
+        error: 400,
+        message: error.message
+    });
+
+    fs.renameSync(UPLOADS_PATH + '/' + req.file.filename, UPLOADS_PATH + '/' + user_id + '.jpg');
+
+    res.json({
+        success: true,
+        data: '/uploads/' + user_id + '.jpg'
+    });
+})
+
 
 router.use((req, res) => {
     res.json({
